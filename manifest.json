@@ -1,7 +1,7 @@
 {
   "name": "Spelling Adventure",
   "short_name": "Spelling",
-  "start_url": ".",
+  "start_url": "/spelling-app/index.html",
   "display": "standalone",
   "background_color": "#4facfe",
   "theme_color": "#4facfe",
