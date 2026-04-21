@@ -5609,7 +5609,7 @@ const wordDB = [
   {
     "block": "8",
     "num": 237,
-    "word": "archeologist",
+    "word": "archaeologist",
     "phon": "",
     "def": "a person who studies objects from the past",
     "mean": "arqueólogo",
