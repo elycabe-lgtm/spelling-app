@@ -1,0 +1,5152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Spelling Adventure – Eithan Edition PRO</title>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Spelling">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>Spelling Adventure – Eithan Edition PRO</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f8fafc;
+padding-bottom: env(safe-area-inset-bottom);  /* 🔥 AGREGA */
+}
+
+.container{
+display:flex;
+min-height:100vh;
+height:auto;
+}
+
+.left{
+   flex:2;
+   display:flex;
+   justify-content:center;
+   align-items:flex-start;
+   padding-top:10px; /* 🔥 AGREGA ESTA */
+}
+
+.right{
+flex:1;
+background:#f7f9fb;
+padding:20px;
+overflow:auto;
+}
+
+/* CARD */
+
+.card{
+margin-top:180px;
+background:white;
+padding:30px;
+border-radius:30px;
+width:900px;
+text-align:center;
+position:relative;
+}
+
+.card{
+   padding-bottom:280px; /* 🔥 DUPLICA ESPACIO */
+}
+
+.card::before{
+   display:none;
+}
+
+@keyframes borderGlow{
+0%{background-position:0%}
+100%{background-position:300%}
+}
+
+/* HEADER */
+
+.header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+position:relative;
+}
+
+.header h2{
+position:relative;
+left:auto;
+transform:none;
+margin:0 auto;
+
+font-size:clamp(26px,3.5vw,40px);
+font-weight:900;
+letter-spacing:1px;
+
+white-space:nowrap;
+flex:1;
+text-align:center;
+}
+
+.avatarArea{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:6px;
+}
+
+.avatar{
+width:120px;
+height:120px;
+object-fit:contain;
+}
+
+/* SCORE */
+
+.scoreRow{
+
+padding:0 10px;
+   display:flex;
+   justify-content:center;   /* 🔥 centrar */
+   align-items:center;
+   gap:12px;                 /* 🔥 espacio entre elementos */
+   font-size:20px;           /* opcional más grande */
+   font-weight:bold;
+   flex-wrap:wrap;           /* 🔥 CLAVE: evita que se corte */
+   text-align:center;
+  white-space:nowrap;   /* 🔥 evita que se corte */
+
+}
+
+/* =========================
+🏆 RANKING PRO VISUAL
+========================= */
+
+.rankCard{
+background:linear-gradient(135deg,#ffffff,#f1f2f6);
+padding:22px;                 /* ⬆ más espacio */
+border-radius:20px;
+box-shadow:0 12px 25px rgba(0,0,0,0.18);
+text-align:center;
+margin-top:20px;
+}
+
+.fireBar{
+font-size:34px;              /* 🔥 MÁS GRANDE */
+letter-spacing:6px;
+margin-bottom:10px;
+}
+
+.rankBadge{
+font-size:22px;              /* ⬆ más grande */
+font-weight:900;
+padding:6px 14px;
+border-radius:12px;
+display:inline-block;
+margin-bottom:10px;
+}
+
+.rankStats{
+font-size:20px;              /* ⬆ texto más grande */
+line-height:1.8;
+font-weight:bold;
+}
+
+/* PROGRESS */
+
+.progress{
+   height:14px;
+   background:#dfe6e9;
+   border-radius:20px;
+   margin:5px 0;
+   width:100%;
+   overflow:hidden;
+}
+
+.bar{
+   height:100%;
+   width:0%;
+   background: linear-gradient(90deg,#00c853,#64dd17);
+   border-radius:20px;
+   transition: width 0.4s ease;
+}
+
+/* INPUTS */
+
+select,input{
+padding:8px;
+border-radius:10px;
+margin:5px;
+}
+
+/* BUTTONS */
+
+button{
+padding:10px 14px;
+border-radius:12px;
+border:none;
+color:#fff;
+font-weight:bold;
+cursor:pointer;
+margin:4px;
+
+transition: transform 0.08s ease;
+
+box-shadow:0 6px 0 rgba(0,0,0,0.2);
+}
+
+button:active{
+transform:translateY(4px);
+box-shadow:0 2px 0 rgba(0,0,0,0.2);
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+/* BUTTON COLORS */
+
+.start{background:#2ecc71;}
+.repeat{background:#3498db;}
+.prev{background:#e84393;}
+.next{background:#f39c12;}
+.practice{background:#6c5ce7;}
+.apply{background:#2d3436;}
+
+.show{background:#8e44ad;}
+.btn-def{background:#e74c3c;}
+.btn-mean{background:#16a085;}
+.btn-sent{background:#1abc9c;}
+.btn-img{background:#34495e;}
+
+/* OPTIONS */
+
+.option{
+width:45%;
+display:inline-block;
+margin:6px;
+padding:14px;
+background:#ecf0f1;
+border-radius:12px;
+cursor:pointer;
+font-size:22px;
+text-align:center;
+transition:0.2s;
+}
+
+.option:hover{
+background:#dfe6e9;
+transform:scale(1.05);
+}
+
+/* WORD */
+
+#word{
+   font-size:48px;   /* 🔥 un poco más compacto */
+   margin:10px;      /* 🔥 menos espacio vertical */
+   font-weight:bold;
+}
+
+/* 🔥 TYPING MODE */
+
+.typingBox{
+   position:fixed;
+   left:0;
+   width:100%;
+
+   /* 🔥 CLAVE */
+   bottom: env(keyboard-inset-height, 0);
+
+   background:white;
+   padding:12px 10px;
+
+   z-index:9999;
+
+   border-top:2px solid #eee;
+   box-shadow:0 -6px 16px rgba(0,0,0,0.12);
+
+   display:flex;
+   flex-direction:column;
+   align-items:center;
+
+   transition: bottom 0.25s ease;
+}
+
+.typingInput{
+   font-size:32px;
+   padding:14px;
+   border-radius:14px;
+   border:2px solid #ccc;
+   width:90%;              /* 🔥 mejor responsive */
+   max-width:400px;
+   text-align:center;
+   outline:none;
+}
+
+.letterFeedback{
+margin-top:10px;
+font-size:40px;     /* 🔥 MÁS GRANDE */
+letter-spacing:6px;
+font-weight:bold;   /* 🔥 NEGRITA */
+}
+
+.correctLetter{
+color:#2ecc71;
+}
+
+.wrongLetter{
+color:#e74c3c;
+}
+
+/* WORD LIST */
+
+.wordList{
+display:flex;
+gap:10px;
+overflow-x:auto;
+}
+
+.column{
+min-width:160px;
+font-size:13px;
+}
+
+/* DICTIONARY */
+
+.dictCard{
+background:linear-gradient(180deg,#ffffff,#f8fbff);
+padding:25px;
+border-radius:25px;
+box-shadow:0 15px 30px rgba(0,0,0,0.15);
+text-align:center;
+cursor:pointer;
+}
+
+.dictImage{
+width:140px;
+height:140px;
+object-fit:contain;
+margin-bottom:10px;
+}
+
+.dictWord{
+font-size:clamp(18px,4vw,48px);  /* 🔥 MÁS REACTIVO */
+font-weight:900;
+color:#2c3e50;
+letter-spacing:0.3px;
+line-height:1.05;
+margin:8px 0;
+text-align:center;
+
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+
+max-width:100%;
+}
+
+/* =========================
+🔊 WORD PRONUNCIATION EFFECT
+========================= */
+
+@keyframes wordBounce{
+   0%{
+      transform:scale(1);
+      opacity:0.8;
+   }
+   40%{
+      transform:scale(1.3);
+   }
+   60%{
+      transform:scale(1.15);
+   }
+   100%{
+      transform:scale(1.2);
+      opacity:1;
+   }
+}
+
+.wordSpeaking{
+   animation:wordBounce 0.9s ease;
+   transform:scale(1.2);
+   color:#6c5ce7;
+   text-shadow:0 0 12px rgba(108,92,231,0.9);
+   filter:brightness(1.2);
+   transition:0.2s ease;
+}
+.dictPhon{
+color:#9b59b6;
+font-style:italic;
+margin-bottom:10px;
+}
+
+.dictCard div:not(.dictWord){
+font-size:clamp(16px,2.5vw,20px);
+}
+
+.label{
+font-weight:bold;
+margin-top:12px;
+padding:4px 10px;
+border-radius:8px;
+color:#fff;
+display:inline-block;
+min-width:100px;
+
+font-size:clamp(11px,1.2vw,13px);
+
+/* 🔥 AGREGA ESTO */
+cursor:pointer;
+transition:0.2s;
+
+}
+
+.label:hover{
+   transform:scale(1.08);
+   filter:brightness(1.1);
+}
+
+/* =========================
+🔊 ACTIVE SPEAKING EFFECT
+========================= */
+
+.label.active{
+   transform:scale(1.12);
+   filter:brightness(1.3);
+   box-shadow:0 0 12px rgba(255,255,255,0.8);
+}
+
+@keyframes pulseGlow{
+   0%{ box-shadow:0 0 5px rgba(255,255,255,0.5); }
+   50%{ box-shadow:0 0 20px rgba(255,255,255,1); }
+   100%{ box-shadow:0 0 5px rgba(255,255,255,0.5); }
+}
+
+.label.active{
+   animation:pulseGlow 1s infinite;
+}
+
+#output{
+font-size:24px;
+line-height:1.6;
+margin-top:15px;
+}
+
+.label.def{background:#e74c3c;}
+.label.mean{background:#16a085;}
+.label.sent{background:#f39c12;}
+
+/* =========================
+✨ WORD POP ANIMATION
+========================= */
+
+@keyframes wordPop{
+
+0%{
+transform:scale(0.7);
+opacity:0;
+}
+
+60%{
+transform:scale(1.08);
+opacity:1;
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+/* IMAGE MODE PRO */
+
+.imageGrid{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:12px;
+margin-top:10px;
+}
+
+.imageOption{
+width:140px;
+height:140px;
+background:#ecf0f1;
+border-radius:16px;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+transition:0.2s;
+}
+
+.imageOption:hover{
+transform:scale(1.05);
+background:#dfe6e9;
+}
+
+.imageOption img{
+max-width:90%;
+max-height:90%;
+object-fit:contain;
+}
+
+/* =========================
+🧠 MEMORY MATCH MODE
+========================= */
+
+.memoryGrid{
+display:grid;
+grid-template-columns:repeat(auto-fit,110px);
+gap:14px;
+justify-content:center;
+margin-top:20px;
+margin-bottom:90px;
+}
+
+.memoryCard{
+width:120px;
+height:120px;
+perspective:1000px;
+cursor:pointer;
+transition:transform .2s;
+}
+
+.memoryInner{
+width:100%;
+height:100%;
+position:relative;
+transform-style:preserve-3d;
+transition:transform .6s cubic-bezier(.4,.2,.2,1);
+}
+
+.memoryCard.flipped .memoryInner{
+transform:rotateY(180deg) scale(1.05);
+}
+
+.memoryFront,
+.memoryBack{
+position:absolute;
+width:100%;
+height:100%;
+backface-visibility:hidden;
+border-radius:14px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+font-weight:bold;
+}
+
+.memoryFront{
+color:white;
+font-size:28px;
+background:linear-gradient(145deg,#6a11cb,#2575fc);
+box-shadow:0 6px 14px rgba(0,0,0,0.2);
+}
+
+.memoryBack{
+background:#ffffff;
+border:3px solid #6a11cb;
+transform:rotateY(180deg);
+font-size:22px;
+font-weight:900;
+color:#2c3e50;
+}
+
+.memoryBack img{
+max-width:90%;
+max-height:90%;
+object-fit:contain;
+}
+
+.memoryCard:hover{
+transform:scale(1.08);
+filter:brightness(1.1);
+}
+
+.memoryCard img{
+max-width:90%;
+max-height:90%;
+object-fit:contain;
+}
+
+/* =========================
+🃏 SHUFFLE ANIMATION
+========================= */
+
+@keyframes shuffleIn{
+
+0%{
+transform:scale(0.2) rotate(-25deg);
+opacity:0;
+}
+
+60%{
+transform:scale(1.1) rotate(10deg);
+opacity:1;
+}
+
+100%{
+transform:scale(1) rotate(0deg);
+}
+
+}
+
+.memoryCard{
+animation:shuffleIn .45s ease;
+}
+
+.memoryHidden{
+background:#34495e;
+color:#34495e;
+}
+
+.memoryMatch{
+background:#2ecc71;
+color:white;
+animation:matchGlow .6s ease;
+}
+
+@keyframes matchGlow{
+
+0%{
+transform:scale(1);
+box-shadow:0 0 0 rgba(46,204,113,0);
+}
+
+50%{
+transform:scale(1.12);
+box-shadow:0 0 25px rgba(46,204,113,.8);
+}
+
+100%{
+transform:scale(1);
+box-shadow:0 0 10px rgba(46,204,113,.4);
+}
+
+}
+
+.memoryMatch img{
+animation:shine 1.2s infinite alternate;
+}
+
+@keyframes shine{
+
+0%{
+filter:brightness(1);
+}
+
+100%{
+filter:brightness(1.4);
+}
+
+}
+
+/* =========================
+✨ MATCH EXPLOSION
+========================= */
+
+@keyframes matchExplosion{
+
+0%{
+transform:scale(1);
+}
+
+40%{
+transform:scale(1.3);
+}
+
+70%{
+transform:scale(0.9);
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+.memoryMatch{
+animation:matchExplosion .5s ease;
+}
+
+
+/* =========================
+🏆 MEMORY COMPLETE MESSAGE
+========================= */
+
+.memoryWin{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:white;
+padding:20px 30px;
+border-radius:20px;
+font-size:32px;
+font-weight:bold;
+color:#6a11cb;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+animation:memoryPop 0.6s ease;
+z-index:10;
+}
+
+@keyframes memoryPop{
+
+0%{
+transform:translate(-50%,-50%) scale(0.5);
+opacity:0;
+}
+
+70%{
+transform:translate(-50%,-50%) scale(1.1);
+opacity:1;
+}
+
+100%{
+transform:translate(-50%,-50%) scale(1);
+}
+
+}
+
+/* =========================
+🎰 ROULETTE LETTER
+========================= */
+
+@keyframes rouletteSpin{
+0%{transform:scale(0.8) rotate(-10deg);opacity:0;}
+50%{transform:scale(1.2) rotate(5deg);}
+100%{transform:scale(1) rotate(0deg);opacity:1;}
+}
+
+.roulette{
+animation:rouletteSpin 0.2s ease;
+}
+
+/* =========================
+🔥 COMBO SYSTEM
+========================= */
+
+.comboText{
+position:absolute;
+top:30%;
+left:50%;
+transform:translateX(-50%);
+font-size:36px;
+font-weight:900;
+color:#e67e22;
+pointer-events:none;
+animation:comboPop 0.6s ease;
+z-index:20;
+}
+
+.fireMode{
+color:#e74c3c;
+text-shadow:0 0 20px rgba(231,76,60,0.7);
+animation:firePulse 0.6s infinite alternate;
+}
+
+@keyframes comboPop{
+0%{transform:translateX(-50%) scale(0.5);opacity:0;}
+70%{transform:translateX(-50%) scale(1.2);opacity:1;}
+100%{transform:translateX(-50%) scale(1);}
+}
+
+@keyframes firePulse{
+0%{transform:translateX(-50%) scale(1);}
+100%{transform:translateX(-50%) scale(1.1);}
+}
+
+@keyframes fadeIn{
+   from{
+      opacity:0;
+      transform:scale(0.8);
+   }
+   to{
+      opacity:1;
+      transform:scale(1);
+   }
+}
+
+
+/* =========================
+🔍 AUTOCOMPLETE STYLE
+========================= */
+
+.autoItem{
+   padding:8px;
+   background:#ecf0f1;
+   margin:4px 0;
+   border-radius:8px;
+   cursor:pointer;
+   font-weight:bold;
+   transition:0.15s;
+}
+
+.autoItem:hover{
+   background:#dfe6e9;
+   transform:scale(1.03);
+}
+
+/* =========================
+🎴 CARD POP EFFECT
+========================= */
+
+.dictCard{
+   animation:cardPop 0.4s ease;
+   transform-origin:center;
+}
+
+@keyframes cardPop{
+   0%{
+      transform:scale(0.85);
+      opacity:0;
+   }
+   60%{
+      transform:scale(1.05);
+   }
+   100%{
+      transform:scale(1);
+      opacity:1;
+   }
+}
+
+/* =========================
+🖼 IMAGE ANIMATION
+========================= */
+
+.dictImage{
+   animation:imageZoom 0.6s ease;
+}
+
+@keyframes imageZoom{
+   0%{
+      transform:scale(0.8);
+      opacity:0;
+   }
+   100%{
+      transform:scale(1);
+      opacity:1;
+   }
+}
+
+/* HOVER PRO */
+.dictCard:hover{
+   transform:scale(1.02);
+   transition:0.2s;
+}
+
+.shieldPop{
+   animation: shieldPopAnim 0.6s ease;
+}
+
+@keyframes shieldPopAnim{
+   0%{ transform:scale(1) }
+   40%{ transform:scale(1.3) }
+   100%{ transform:scale(1) }
+}
+
+.shieldHit{
+   animation: shieldHitAnim 0.4s;
+}
+
+@keyframes shieldHitAnim{
+   0%{ transform:scale(1); filter:brightness(1) }
+   30%{ transform:scale(1.2); filter:brightness(2) }
+   100%{ transform:scale(1); filter:brightness(1) }
+}
+
+/* 🛡️ NIVEL 1 */
+.shield1{
+   filter:brightness(1);
+}
+
+/* 🛡️ NIVEL 2 (azul glow) */
+.shield2{
+   color:#74b9ff;
+   text-shadow:0 0 8px #74b9ff;
+}
+
+/* 🛡️ NIVEL 3+ (🔥 dorado PRO) */
+.shield3{
+   color:gold;
+   text-shadow:
+      0 0 6px gold,
+      0 0 12px orange,
+      0 0 20px yellow;
+   animation: shieldGlow 1s infinite alternate;
+}
+
+/* ✨ animación glow */
+@keyframes shieldGlow{
+   from{ transform:scale(1) }
+   to{ transform:scale(1.15) }
+}
+
+.shieldExplode{
+   animation: explode 0.5s ease;
+}
+
+@keyframes explode{
+   0%{ transform:scale(1); filter:brightness(1) }
+   50%{ transform:scale(1.6); filter:brightness(3) }
+   100%{ transform:scale(1); filter:brightness(1) }
+}
+
+.screenFlash{
+   animation: flashRed 0.2s;
+}
+
+@keyframes flashRed{
+   0%{ background:#ff7675 }
+   100%{ background:transparent }
+}
+
+.heartExplosion{
+   position:absolute;
+   font-size:28px;
+   animation: heartExplode 0.8s ease forwards;
+   pointer-events:none;
+}
+
+@keyframes heartExplode{
+   0%{
+      transform:scale(1) translateY(0);
+      opacity:1;
+   }
+   40%{
+      transform:scale(1.6) translateY(-10px);
+   }
+   100%{
+      transform:scale(0.5) translateY(-30px);
+      opacity:0;
+   }
+}
+
+/* 💔 estado inicial */
+.heartCrack{
+   position:absolute;
+   font-size:30px;
+   pointer-events:none;
+   animation: heartAppear 0.3s ease;
+}
+
+/* ❤️ aparece */
+@keyframes heartAppear{
+   from{ transform:scale(0.5); opacity:0 }
+   to{ transform:scale(1); opacity:1 }
+}
+
+/* 💔 grieta */
+.heartCrack.cracked{
+   animation: heartShake 0.3s;
+}
+
+/* vibración antes de romper */
+@keyframes heartShake{
+   0%{ transform:translateX(0) }
+   25%{ transform:translateX(-3px) }
+   50%{ transform:translateX(3px) }
+   75%{ transform:translateX(-2px) }
+   100%{ transform:translateX(0) }
+}
+
+/* 💥 explosión */
+.heartExplosion{
+   animation: heartExplode 0.5s forwards;
+}
+
+@keyframes heartExplode{
+   0%{
+      transform:scale(1);
+      opacity:1;
+   }
+   50%{
+      transform:scale(1.6);
+   }
+   100%{
+      transform:scale(0.3) translateY(-30px);
+      opacity:0;
+   }
+}
+
+#livesUI{
+   position:relative;
+   display:inline-block;
+ font-size:22px;
+   text-align:center;
+}
+
+html, body{
+   height:100%;
+   overflow-x:hidden;
+   overflow-y:auto;   /* 🔥 AGREGA ESTO */
+}
+
+/* 🔥 SCROLL CORRECTO EN iPAD */
+#gameArea{
+   max-height:none;              /* 🔥 CLAVE */
+   height:auto;                  /* 🔥 CLAVE */
+   overflow:visible;             /* 🔥 CLAVE */
+}
+
+/* 📱 AJUSTE RESPONSIVE */
+@media (max-width:1024px){
+
+   .container{
+      flex-direction:column;
+   }
+
+   .left, .right{
+      width:100%;
+      height:auto;
+   }
+
+   .card{
+      width:95%;
+padding-bottom: 300px;
+   }
+
+   .wordList{
+      overflow-x:auto;
+      display:flex;
+   }
+
+   .dictCard{
+      width:100%;
+   }
+
+   button{
+      padding:14px 18px;
+      font-size:18px;
+   }
+
+   .option{
+      font-size:24px;
+      padding:18px;
+   }
+
+}
+
+/* 🔥 ANIMACIÓN SUAVE */
+.fade{
+   animation:fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn{
+   from{opacity:0; transform:translateY(5px);}
+   to{opacity:1; transform:translateY(0);}
+}
+
+/* ✅ CORRECTO */
+.correctFlash{
+   animation: correctFlashAnim 0.4s;
+}
+
+@keyframes correctFlashAnim{
+   0%{ background:rgba(46,204,113,0.7); }  /* verde */
+   100%{ background:transparent; }
+}
+
+.errorFlash{
+   animation: errorFlashAnim 0.4s;
+}
+
+@keyframes errorFlashAnim{
+   0%{ background:rgba(231,76,60,0.8); }  /* rojo más fuerte */
+   50%{ background:rgba(231,76,60,0.4); }
+   100%{ background:transparent; }
+}
+
+.shakeStrong{
+   animation:shakeStrong 0.3s;
+}
+
+/* 🎉 CONFETTI */
+.confetti{
+   position:fixed;
+   width:8px;
+   height:8px;
+   pointer-events:none;
+   z-index:9999;
+   animation:confettiExplosion 1s ease-out forwards;
+}
+
+@keyframes confettiExplosion{
+   0%{
+      transform:translate(0,0) scale(1);
+      opacity:1;
+   }
+   100%{
+      transform:translate(var(--x), var(--y)) scale(0.5);
+      opacity:0;
+   }
+}
+
+
+/* =========================
+FIX CONTROLS iPAD
+========================= */
+
+.topControls{
+   display:flex;
+   flex-wrap:wrap;
+   align-items:center;
+   justify-content:center;
+   gap:10px;
+}
+
+/* 🔥 inputs más pequeños */
+#from, #to{
+   width:60px;
+   padding:6px;
+}
+
+/* 🔥 selects más compactos */
+.topControls select{
+   max-width:140px;
+}
+
+/* 🔥 botón Apply */
+.apply{
+   white-space:nowrap;
+}
+
+.hud{
+   position:fixed;
+   top:0;
+   left:0;
+   width:100%;
+
+   background:white;
+   padding:10px 15px;
+
+   z-index:9999;
+
+   box-shadow:0 4px 12px rgba(0,0,0,0.1);
+
+   display:flex;
+   flex-direction:column;
+   gap:6px;
+}
+
+.heart{
+   display:inline-block;
+   animation: heartBeat 0.6s ease;
+}
+
+@keyframes heartBeat{
+   0%{ transform:scale(1) }
+   30%{ transform:scale(1.3) }
+   60%{ transform:scale(0.9) }
+   100%{ transform:scale(1) }
+}
+
+
+.shieldUI{
+   display:inline-block;
+   margin-left:8px;
+   font-size:20px;
+   animation: shieldPulse 0.8s ease;
+}
+
+@keyframes shieldPulse{
+   0%{ transform:scale(1) }
+   50%{ transform:scale(1.3) }
+   100%{ transform:scale(1) }
+}
+
+
+.progressPop{
+   animation: progressBounce 0.2s;
+}
+
+@keyframes progressBounce{
+   0%{ transform:scaleY(1) }
+   50%{ transform:scaleY(1.4) }
+   100%{ transform:scaleY(1) }
+}
+
+
+body.pencilMode .typingInput{
+   font-size:42px;
+   padding:20px;
+   height:80px;
+   border:3px solid #6c5ce7;
+}
+
+body.pencilMode #word{
+   font-size:60px;
+}
+
+body.pencilMode .typingBox{
+   padding:20px;
+}
+
+@media (orientation: portrait) and (max-width: 1024px){
+
+   .typingInput{
+      font-size:22px;
+      padding:14px;
+   }
+
+}
+
+
+/* =========================
+📱 FIX iPAD VERTICAL (TECLADO)
+========================= */
+
+@media (orientation: portrait) and (max-width: 1024px){
+
+   .typingBox{
+      position:relative !important;
+      bottom:auto !important;
+      left:auto !important;
+
+      width:100%;
+      margin-top:12px;
+
+      box-shadow:none;
+      border-top:none;
+   }
+
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LEFT SIDE (GAME) -->
+<div class="left">
+
+<!-- 🔼 HUD FUERA -->
+<div class="hud">
+
+   <div class="scoreRow">
+      <div id="stars"></div>
+      <div id="score"></div>
+   </div>
+
+   <div id="livesUI"></div>
+
+   <div id="levelUI"></div>
+
+   <div class="progress">
+      <div id="bar" class="bar"></div>
+   </div>
+
+</div>
+
+<div class="card">
+
+
+<!-- HEADER -->
+<div class="header">
+
+<h2>🏆 Spelling Adventure</h2>
+
+<div class="avatarArea">
+
+<img id="avatar" class="avatar" style="display:none;">
+
+<select id="avatarSelect">
+<option value="">Selecciona jugador</option>
+<option value="eithan">Eithan</option>
+<option value="ian">Ian</option>
+</select>
+
+</div>
+
+</div>
+
+<!-- MODES -->
+<div>
+<select id="mode">
+<option value="typing">Typing</option>
+<option value="mc">Multiple Choice</option>
+<option value="image">Image Mode</option>
+<option value="memory">Memory Match</option>
+<option value="build">Build Word</option>
+<option value="speed">Speed Run</option>
+<option value="fill">Fill the Gap</option>
+<option value="practice">Practice Mode</option>
+<option value="pencil">✏️ Pencil</option>
+
+</select>
+
+<select id="memoryDifficulty">
+<option value="6">Easy (6 pairs)</option>
+<option value="8">Medium (8 pairs)</option>
+<option value="12">Hard (12 pairs)</option>
+</select>
+
+<select id="block"></select>
+</div>
+
+<!-- SETTINGS -->
+<div class="topControls">
+
+<select id="order">
+<option value="seq">Sequential</option>
+<option value="rand">Random</option>
+</select>
+
+<select id="rangeType">
+<option value="all">All</option>
+<option value="custom">Custom</option>
+</select>
+
+<select id="imageFilter">
+<option value="all">All Words</option>
+<option value="images">Only With Images</option>
+</select>
+
+<input id="from" placeholder="From">
+<input id="to" placeholder="To">
+
+<button class="apply" onclick="applySettings()">Apply</button>
+
+</div>
+
+<!-- NAVIGATION -->
+<div>
+<button class="start" onclick="startGame()">Start</button>
+<button class="repeat" onclick="repeatWord()">Repeat</button>
+<button class="prev" onclick="prevWord()">Prev</button>
+<button class="next" onclick="advanceGame()">Next</button>
+<button class="practice" onclick="practiceMistakes()">Practice</button>
+</div>
+
+<!-- WORD DISPLAY -->
+<div id="word">Press Start</div>
+
+<!-- 🔥 GAME AREA -->
+<div id="gameArea"></div>
+
+<div id="gifZone" style="
+   position:absolute;
+   right:40px;
+   top:55%;
+   transform:translateY(-50%);
+   width:220px;
+   height:220px;
+   pointer-events:none;
+"></div>
+
+<!-- 🔥 TYPING MODE (NUEVO) -->
+<div id="typingContainer" class="typingBox" style="display:none;">
+
+<input 
+id="typingInput" 
+class="typingInput" 
+placeholder="Type here..." 
+autocomplete="off"
+/>
+
+<div id="letterFeedback" class="letterFeedback"></div>
+
+</div>
+
+<!-- ACTION BUTTONS -->
+<div>
+<button class="show" onclick="showWord()">Show</button>
+<button class="btn-def" onclick="showDefinition()">Definition</button>
+<button class="btn-mean" onclick="showMeaning()">Meaning</button>
+<button class="btn-sent" onclick="showSentence()">Sentence</button>
+<button class="btn-img" onclick="showImage()">Image</button>
+</div>
+
+<!-- OUTPUT -->
+<div id="output"></div>
+
+</div>
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="right">
+
+<h3>📚 Word Lists</h3>
+
+<select id="listSelector">
+<option value="none">NONE</option>
+</select>
+
+<div id="wordList" class="wordList"></div>
+
+<hr>
+
+
+<input 
+id="dictInput" 
+placeholder="Type a word..." 
+style="width:100%;padding:10px;"
+>
+
+<button onclick="clearDictionary()" style="margin-top:8px;background:#636e72;">
+Clean
+</button>
+
+<h3>📖 Visual Dictionary</h3>
+
+<div id="autocomplete"></div>
+
+<div id="dictResult"></div>
+
+
+<div id="rankingUI" style="
+   font-size:18px;
+   font-weight:bold;
+   margin-top:20px;
+   line-height:1.6;
+"></div>
+
+</div>
+
+</div>
+
+<!-- DATA FILES -->
+<script src="data/wordDB.js"></script>
+<script src="data/blocks.js"></script>
+<script src="data/imageDB.js"></script>
+
+<script>
+
+/* =========================
+🛠 ERROR DETECTOR
+========================= */
+
+window.onerror=function(msg,url,line,col,error){
+
+console.log("🚨 ERROR:",msg)
+console.log("📍 Line:",line)
+console.log("📄 File:",url)
+console.log(error)
+
+alert("Error: "+msg+" line:"+line)
+
+}
+
+/* =========================
+🔊 AUDIO SYSTEM PRO
+========================= */
+
+function celebrateSuccess(){
+
+   let el=document.createElement("div")
+   el.innerText="✨ Great!"
+   el.style.position="absolute"
+   el.style.top="40%"
+   el.style.left="50%"
+   el.style.transform="translate(-50%,-50%)"
+   el.style.fontSize="40px"
+   el.style.fontWeight="bold"
+   el.style.color="#f1c40f"
+   el.style.zIndex="999"
+
+   document.body.appendChild(el)
+
+   el.animate([
+      {transform:"translate(-50%,-50%) scale(0.5)", opacity:0},
+      {transform:"translate(-50%,-50%) scale(1.2)", opacity:1},
+      {transform:"translate(-50%,-50%) scale(1)", opacity:0}
+   ],{duration:800})
+
+   setTimeout(()=>el.remove(),800)
+}
+
+function animateShieldGain(){
+
+   let el = document.getElementById("livesUI")
+
+   if(!el) return
+
+   el.classList.add("shieldPop")
+
+   setTimeout(()=>{
+      el.classList.remove("shieldPop")
+   },600)
+}
+
+function animateShieldBlock(){
+
+   let el = document.getElementById("livesUI")
+
+   if(!el) return
+
+   el.classList.add("shieldHit")
+
+   setTimeout(()=>{
+      el.classList.remove("shieldHit")
+   },400)
+}
+
+function explodeHeart(){
+
+   let container = document.getElementById("livesUI")
+   if(!container) return
+
+   let heart = document.createElement("div")
+   heart.innerText = "❤️"
+   heart.className = "heartCrack"
+
+   container.appendChild(heart)
+
+   // 💔 fase 1: grieta
+   setTimeout(()=>{
+      heart.innerText = "💔"
+      heart.classList.add("cracked")
+   },300)
+
+   // 💥 fase 2: explosión
+   setTimeout(()=>{
+      heart.classList.remove("cracked")
+      heart.classList.add("heartExplosion")
+   },600)
+
+   // 🧹 limpiar
+   setTimeout(()=>{
+      heart.remove()
+   },1100)
+}
+
+
+// shakeHard()
+function shakeHard(){
+
+   let el = document.querySelector(".card") || document.body
+
+   el.animate([
+      {transform:"translateX(-8px)"},
+      {transform:"translateX(8px)"},
+      {transform:"translateX(-5px)"},
+      {transform:"translateX(5px)"},
+      {transform:"translateX(0)"}
+   ],{duration:250})
+}
+
+// showCorrectFX()
+function showCorrectFX(){
+
+   let card = document.querySelector(".card")
+   if(!card) return
+
+   // 🔥 QUITAMOS FLASH VERDE
+   // card.classList.add("correctFlash")
+
+   setTimeout(()=>{
+      card.classList.remove("correctFlash")
+   },400)
+}
+
+function showErrorFX(){
+
+   let card = document.querySelector(".card")
+   if(!card) return
+
+   card.classList.add("errorFlash")
+   card.classList.add("shakeStrong")
+
+   setTimeout(()=>{
+      card.classList.remove("errorFlash")
+      card.classList.remove("shakeStrong")
+   },250)
+}
+
+
+function showConfettiExplosion(){
+
+  let card = document.querySelector(".card")
+  if(!card) return   // 🔥 protección extra (MUY RECOMENDADO)
+
+  let rect = card.getBoundingClientRect()
+
+  let centerX = rect.left + rect.width / 2
+  let centerY = rect.top + rect.height / 2
+
+  for(let i=0;i<50;i++){
+
+     let c = document.createElement("div")
+     c.className = "confetti"
+
+     let colors = ["#f1c40f","#e67e22","#2ecc71","#3498db","#e74c3c"]
+     let shapes = ["■","★","●","❤"]
+
+     if(Math.random() > 0.5){
+        c.innerText = shapes[Math.floor(Math.random()*shapes.length)]
+        c.style.background = "transparent"
+        c.style.fontSize = "14px"
+        c.style.fontWeight = "bold"
+     }else{
+        c.style.background = colors[Math.floor(Math.random()*colors.length)]
+     }
+
+     c.style.width = (6 + Math.random()*6) + "px"
+     c.style.height = c.style.width
+
+     c.style.left = centerX + "px"
+     c.style.top = centerY + "px"
+
+     let angle = Math.random() * 2 * Math.PI
+     let distance = 180 + Math.random()*140
+
+     let x = Math.cos(angle) * distance
+     let y = Math.sin(angle) * distance
+
+     c.style.setProperty("--x", x + "px")
+     c.style.setProperty("--y", y + "px")
+
+     let container = document.getElementById("gameArea") || document.body
+container.appendChild(c)
+
+     setTimeout(()=>c.remove(),1000)
+  }
+
+} 
+
+function screenFlash(){
+   // 🔥 desactivado completamente
+}
+
+
+function showGIF(src, duration=1200){
+
+   let existing = document.querySelector(".gif-active")
+if(existing) existing.remove()
+
+   let gif = document.createElement("img")
+
+   gif.src = src
+   gif.classList.add("gif-active")
+
+   gif.style.width = "100%"
+   gif.style.height = "100%"
+   gif.style.objectFit = "contain"
+
+   let zone = document.getElementById("gifZone")
+   if(!zone) return
+
+   zone.innerHTML = ""
+   zone.appendChild(gif)
+
+   setTimeout(()=>{
+      gif.remove()
+   }, duration)
+}
+
+const sounds={
+correct:new Audio("assets/sounds/correct.mp3"),
+wrong:new Audio("assets/sounds/wrong.mp3"),
+win:new Audio("assets/sounds/win.mp3"),
+level:new Audio("assets/sounds/level.mp3"),
+click:new Audio("assets/sounds/click.mp3")
+}
+
+let lastSoundTime = 0
+
+let streak=0
+let shield = 0            // 🛡️ escudo activo
+let streakUI = null       // 🔥 barra visual
+
+let wrongWords = []
+let reviewMode = false
+
+
+function shakeScreen(keyframes, options){
+
+   let el = document.querySelector(".card")
+
+   if(!el) return
+
+   el.animate(keyframes, options)
+}
+
+function playSound(type){
+
+   let s = sounds[type]
+   if(!s) return
+
+   let volume = 0.6
+
+   if(type==="correct"){
+      if(streak>=3) volume=0.9
+      if(streak>=6) volume=1
+   }
+
+   let clone = s.cloneNode()
+
+   clone.volume = volume
+
+   if(type==="correct" && streak>=5){
+      clone.playbackRate = 1.1
+   }else{
+      clone.playbackRate = 1
+   }
+
+   clone.play().catch(()=>{})
+}
+
+function safePlay(type){
+
+   let now = Date.now()
+
+   if(now - lastSoundTime < 150) return
+
+   lastSoundTime = now
+   playSound(type)
+}
+
+/* CLICK GLOBAL */
+
+// ⚡ TOUCH INMEDIATO (iPad PRO)
+
+let audioUnlocked = false
+
+document.addEventListener("click", e => {
+
+   // 🔥 DESBLOQUEAR AUDIO iOS
+   if(!audioUnlocked){
+      speechSynthesis.speak(new SpeechSynthesisUtterance(" "))
+      audioUnlocked = true
+   }
+
+   let tag = e.target.tagName
+
+   if(tag === "BUTTON"){
+      safePlay("click")
+   }
+
+   // 🔥 PERMITIR CLICK EN OPCIONES
+   if(
+      tag === "INPUT" ||
+      tag === "SELECT" ||
+      tag === "TEXTAREA" ||
+      e.target.classList.contains("option")
+   ){
+      return
+   }
+
+   if(mode.value === "typing" || mode.value === "pencil"){
+      refocusInput()
+   }
+
+})
+
+document.addEventListener("touchstart", e => {
+
+   let tag = e.target.tagName
+
+   if(tag === "BUTTON"){
+      safePlay("click")
+   }
+
+   if(tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA"){
+      return
+   }
+
+   if(mode.value === "typing" || mode.value === "pencil"){
+      refocusInput()
+   }
+
+}, {passive:true})
+
+
+// =========================
+// 🧠 GAME ENGINE (PRO)
+// =========================
+
+function advanceGame(){
+
+   let block = blockSelect.value
+   let cycle = randomCycle[block]
+
+   if(order.value === "rand" && cycle){
+
+      // =========================
+      // 🔥 FIN DE MAIN → REVIEW
+      // =========================
+      if(cycle.phase === "main" && cycle.pending.length === 0){
+
+         cycle.phase = "review"
+         index = 0
+
+         let arr = blocksData[block]
+
+         currentList = cycle.errors
+            .map(w => arr.find(x => x.word === w))
+            .filter(Boolean)
+
+         saveCycle()
+         render()
+         return
+      }
+
+      // =========================
+      // 🔥 FIN DE REVIEW → RESET
+      // =========================
+      if(cycle.phase === "review" && cycle.errors.length === 0){
+
+         let arr = blocksData[block]
+
+         cycle.phase = "main"
+
+// 🔄 reset dominio parcial
+Object.values(getMastery()).forEach(w=>{
+   if(w.mastered){
+      w.streak = 2
+   }
+})
+         cycle.pending = shuffleArray(arr.map(w => w.word))
+         cycle.errors = []
+
+         currentList = arr
+         index = 0
+
+         saveCycle()
+         render()
+         return
+      }
+
+      index++
+
+   }else{
+      index++
+   }
+
+   render()
+}
+
+/* =========================
+🧠 NORMALIZADOR PRO (REAL)
+========================= */
+
+function normalize(word){
+return word
+.toLowerCase()
+.trim()
+}
+
+/* 🔥 RESOLVER IMÁGENES (COMPATIBLE CON TUS ARCHIVOS) */
+
+function capitalize(w){
+return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()
+}
+
+/* =========================
+🖼️ IMAGE PATH FIX
+========================= */
+
+function normalizeImage(word){
+return word
+.toLowerCase()
+.trim()
+.replace(/\s+/g,"_")
+}
+
+function getImagePath(word){
+   return `assets/images/${normalizeImage(word)}.png`
+}
+
+function hasImage(word){
+   if(typeof imageDB === "undefined") return false
+   return imageDB.has(normalizeImage(word))
+}
+
+/* =========================
+⚡ PRELOAD IMAGES (PRO)
+========================= */
+
+function preloadImages(){
+
+   if(typeof imageDB === "undefined") return
+
+   imageDB.forEach(word => {
+
+      let img = new Image()
+      img.src = `assets/images/${word}.png`
+
+   })
+
+}
+
+/* =========================
+🗣️ SPEECH SYSTEM
+========================= */
+
+function speak(text, rate = 0.9, lang = "en-US"){
+
+   speechSynthesis.cancel()
+
+   let u = new SpeechSynthesisUtterance(text)
+
+   let voices = speechSynthesis.getVoices()
+
+   // 🔥 selección inteligente de voz
+   let voice =
+      voices.find(v => v.name.includes("Google") && v.lang.includes("en")) ||
+      voices.find(v => v.name.includes("Samantha")) ||
+      voices.find(v => v.lang === "en-US") ||
+      voices[0]
+
+   if(voice){
+      u.voice = voice
+   }
+
+   u.pitch = 1.1
+u.lang = lang
+u.volume = 1
+
+   speechSynthesis.speak(u)
+}
+
+function speakSpanishFemale(text){
+
+speechSynthesis.cancel()
+
+let voices = speechSynthesis.getVoices()
+
+// 🔥 FIX CRÍTICO
+if(!voices.length){
+
+   speechSynthesis.onvoiceschanged = () => {
+      speakSpanishFemale(text)
+   }
+
+   return
+}
+
+let preferred = [
+"Google español",
+"Google Spanish",
+"Microsoft Sabina",
+"Microsoft Dalia",
+"Paulina",
+"Helena",
+"Monica",
+"Lucia"
+]
+
+let voice = null
+
+for(let name of preferred){
+voice = voices.find(v => 
+v.name.toLowerCase().includes(name.toLowerCase()) &&
+v.lang.includes("es")
+)
+if(voice) break
+}
+
+if(!voice){
+voice = voices.find(v => v.lang.includes("es"))
+}
+
+let u = new SpeechSynthesisUtterance(text)
+
+u.voice = voice
+u.rate = 0.95
+u.pitch = 1.15
+
+speechSynthesis.speak(u)
+}
+speechSynthesis.onvoiceschanged = () => {}
+
+/* =========================
+📦 STATE
+========================= */
+
+const el = {
+
+typingContainer: document.getElementById("typingContainer"), // 👈 COMA AQUÍ
+
+gameArea: document.getElementById("gameArea"),
+word: document.getElementById("word"),
+typingInput: document.getElementById("typingInput"),
+letterFeedback: document.getElementById("letterFeedback")
+}
+
+const rankingUI = document.getElementById("rankingUI")
+
+let currentList=[]
+let index=0
+let correct=0
+let wrong=0
+let lives = 5
+let errorCount = 0
+let progressCount=0
+let clickLock=false
+let answered = false 
+let hintCounter={}
+let playerData={
+  eithan:{
+    mistakes:[],
+    mastery:{},
+    ranking:{
+      bestStreak:0,
+      worstStreak:0,
+      totalCorrect:0,
+      totalWrong:0
+    },
+    lives:5,      // 👈 NUEVO
+    shield:0      // 👈 NUEVO
+  },
+  ian:{
+    mistakes:[],
+    mastery:{},
+    ranking:{
+      bestStreak:0,
+      worstStreak:0,
+      totalCorrect:0,
+      totalWrong:0
+    },
+    lives:5,      // 👈 NUEVO
+    shield:0      // 👈 NUEVO
+  }
+}
+
+
+let currentAvatar = "eithan"
+
+if(!playerData[currentAvatar]){
+   currentAvatar = "eithan"
+}let lastWelcomeAvatar = null
+
+// =========================
+// 📖 DICTIONARY FIX (PRO)
+// =========================
+
+let dictInputEl = document.getElementById("dictInput")
+let dictResultEl = document.getElementById("dictResult")
+
+if(dictInputEl && dictResultEl){
+
+   dictInputEl.addEventListener("input", () => {
+
+      let word = dictInputEl.value.trim().toLowerCase()
+
+      if(!word){
+         dictResultEl.innerHTML = ""
+         return
+      }
+
+      let w = wordDB.find(x => x.word.toLowerCase() === word)
+
+      if(!w){
+         dictResultEl.innerHTML = "<p>No encontrado</p>"
+         return
+      }
+
+      let path = hasImage(w.word) ? getImagePath(w.word) : ""
+
+dictResultEl.innerHTML = `
+   <div class="dictCard">
+      <img class="dictImage"
+           src="${path}"
+           style="${path ? '' : 'display:none'}"
+           onerror="this.style.display='none'">
+
+      <div class="dictWord">${w.word}</div>
+      <div class="dictPhon">${w.phon || ""}</div>
+      <div>${w.mean || ""}</div>
+   </div>
+`
+   })
+}
+
+function getCurrentWord(){
+
+return currentList[index] || null
+}
+
+function saveData(){
+localStorage.setItem("spellingApp", JSON.stringify(playerData))
+}
+
+function savePlayerState(){
+
+   if(!playerData[currentAvatar]) return
+
+   playerData[currentAvatar].lives = lives
+   playerData[currentAvatar].shield = shield
+
+   saveData()
+}
+
+function updateRankingUI(){
+
+let player = playerData[currentAvatar]
+
+if(!player){
+   console.error("🚨 playerData missing:", currentAvatar)
+   return
+}
+
+if(!player.ranking){
+   player.ranking = {
+      bestStreak:0,
+      worstStreak:0,
+      totalCorrect:0,
+      totalWrong:0
+   }
+}
+
+let data = player.ranking
+let accuracy = 0
+let total = data.totalCorrect + data.totalWrong
+
+if(total > 0){
+   accuracy = Math.round((data.totalCorrect / total) * 100)
+}
+
+/* 🔥 FIRE BAR */
+let fire = "🔥".repeat(Math.min(streak,10))
+
+/* 🏆 RANK LEVEL */
+let badge = "BRONZE"
+let badgeClass = "bronze"
+
+if(accuracy >= 60){
+   badge = "SILVER"
+   badgeClass = "silver"
+}
+
+if(accuracy >= 75){
+   badge = "GOLD"
+   badgeClass = "gold"
+}
+
+if(accuracy >= 90){
+   badge = "PLATINUM"
+   badgeClass = "platinum"
+}
+
+/* 🎨 UI */
+rankingUI.innerHTML = `
+<div class="rankCard">
+
+   <div class="fireBar">${fire}</div>
+
+   <div class="rankBadge ${badgeClass}">
+      🏆 ${badge}
+   </div>
+
+   <div style="font-size:22px">
+🔥 Streak: ${streak}<br>
+💀 Errors: ${data.worstStreak}<br>
+🥇 Best: ${data.bestStreak}<br>
+🎯 Accuracy: ${accuracy}%
+</div>
+
+</div>
+`
+}
+function updateStats(isCorrect){
+
+   let r = playerData[currentAvatar].ranking
+
+if(!r){
+   r = {
+      bestStreak:0,
+      worstStreak:0,
+      totalCorrect:0,
+      totalWrong:0
+   }
+
+   playerData[currentAvatar].ranking = r   // 🔥 CLAVE
+}
+
+   if(isCorrect){
+      r.totalCorrect++
+
+      if(streak > r.bestStreak){
+         r.bestStreak = streak
+      }
+
+      r.worstStreak = 0
+
+   }else{
+
+      r.totalWrong++
+      r.worstStreak++
+   }
+
+   updateRankingUI()
+   saveData()
+}
+
+
+function showGameOver(){
+
+   let modal=document.createElement("div")
+
+   modal.style.position="absolute"
+   modal.style.top="50%"
+   modal.style.left="50%"
+   modal.style.transform="translate(-50%,-50%)"
+   modal.style.background="white"
+   modal.style.padding="30px"
+   modal.style.borderRadius="20px"
+   modal.style.textAlign="center"
+   modal.style.zIndex="999"
+
+showGIF("assets/gifs/gameover.gif",2000)   
+
+modal.innerHTML=`
+   <h2>💀 Game Over</h2>
+   <p>Score: ${correct}</p>
+   <button onclick="location.reload()">Restart</button>
+   `
+
+   gameArea.appendChild(modal)
+
+   safePlay("wrong")
+}
+
+function validatePlayerData(){
+
+  ["eithan","ian"].forEach(p=>{
+
+   if(!playerData[p]){
+      playerData[p] = {}
+   }
+
+   if(!playerData[p].mistakes){
+      playerData[p].mistakes = []
+   }
+
+   if(!playerData[p].mastery){
+      playerData[p].mastery = {}
+   }
+
+   if(!playerData[p].ranking){
+      playerData[p].ranking = {
+         bestStreak:0,
+         worstStreak:0,
+         totalCorrect:0,
+         totalWrong:0
+      }
+   }
+
+   // 🔥 AQUÍ VA (FUERA)
+   if(playerData[p].lives === undefined){
+      playerData[p].lives = 5
+   }
+
+   if(playerData[p].shield === undefined){
+      playerData[p].shield = 0
+   }
+
+})
+
+}
+
+let savedData = localStorage.getItem("spellingApp")
+
+if(savedData){
+   playerData = JSON.parse(savedData)
+}
+
+validatePlayerData()
+
+preloadImages()
+
+updateRankingUI()
+
+let speedTimer=null
+let speedTime=60
+let speedLetter=""
+let speedScore=0
+let speedTotal=0
+let wordsBox=null
+let speedCombo=0
+let comboUI=null
+let letterInterval=null
+
+/* TIMER MEMORY MODE */
+
+let memoryTime=0
+let memoryTimer=null
+
+let xp=0
+let level=1
+
+const TRANSITION_TIME = 450
+
+// =========================
+// 🧠 RANDOM PROGRESS SYSTEM
+// =========================
+
+let randomProgress = JSON.parse(localStorage.getItem("randomProgress") || "{}")
+let randomCycle = JSON.parse(localStorage.getItem("randomCycle") || "{}")
+
+let saveTimeout
+
+function saveCycle(){
+
+   clearTimeout(saveTimeout)
+
+   saveTimeout = setTimeout(()=>{
+      localStorage.setItem("randomCycle", JSON.stringify(randomCycle))
+   },300)
+}
+
+let today = new Date().toDateString()
+
+let lastDay = localStorage.getItem("lastDay")
+
+function getToday(){
+   return new Date().toDateString()
+}
+
+let levelPlayed={
+50:false,
+100:false,
+150:false,
+200:false
+}
+
+let blocksData={}
+
+function getMistakes(){
+return playerData[currentAvatar].mistakes
+}
+
+function getMastery(){
+return playerData[currentAvatar].mastery
+}
+
+function getDifficulty(word){
+
+let data = getMastery()[word] || {score:0}
+
+if(!data) return "hard"
+
+if(data.score >= 7) return "easy"
+if(data.score >= 3) return "medium"
+
+return "hard"
+}
+
+function updateMastery(word, correctAnswer){
+
+   let mastery = getMastery()
+
+   if(!mastery[word]){
+      mastery[word] = {
+         score: 0,
+         streak: 0,
+         fails: 0,
+         lastSeen: Date.now(),
+         nextReview: Date.now()
+      }
+   }
+
+   let data = mastery[word]
+
+   // ✅ RESPUESTA CORRECTA
+   if(correctAnswer){
+
+      data.score += 2
+      data.streak++
+      data.fails = 0
+
+// 🏆 DOMINIO (3 aciertos consecutivos)
+if(data.streak >= 3){
+   data.mastered = true
+}
+
+   }else{
+
+      data.score -= 1
+      data.streak = 0
+      data.fails++
+   }
+
+   // 🔒 límites
+   data.score = Math.max(0, Math.min(10, data.score))
+
+   // =========================
+   // 🧠 SRS (AQUÍ DEBE IR)
+   // =========================
+
+   let now = Date.now()
+
+   let interval = 0
+
+   if(data.score >= 8){
+      interval = 1000 * 60 * 60 * 24 * 3
+   }
+   else if(data.score >= 5){
+      interval = 1000 * 60 * 60 * 12
+   }
+   else if(data.score >= 3){
+      interval = 1000 * 60 * 30
+   }
+   else{
+      interval = 1000 * 60 * 2
+   }
+
+   data.lastSeen = now
+   data.nextReview = now + interval
+
+   saveData()
+}
+
+// 🧩 FILL GAP HELPER
+function hideLetters(word){
+
+   if(!word || typeof word !== "string"){
+      console.error("🚨 hideLetters recibió:", word)
+      return ""
+   }
+
+   const vowels = "aeiouAEIOU"
+   let arr = word.split("")
+
+   let mistakes = getMistakes()
+   let difficulty = Math.min(0.8, 0.4 + (mistakes.length * 0.07))
+
+   let hiddenIndexes = []
+
+   // vocales
+   for(let i=0;i<arr.length;i++){
+      if(vowels.includes(arr[i]) && Math.random() < difficulty){
+         hiddenIndexes.push(i)
+      }
+   }
+
+   // asegurar al menos 1
+   if(hiddenIndexes.length === 0){
+      let possible = arr
+         .map((l,i)=> l !== " " ? i : null)
+         .filter(i=>i!==null)
+
+      let randomIndex = possible[Math.floor(Math.random()*possible.length)]
+      hiddenIndexes.push(randomIndex)
+   }
+
+   // extra dificultad
+   for(let i=0;i<arr.length;i++){
+      if(!hiddenIndexes.includes(i) && Math.random() < difficulty*0.5){
+         if(arr[i] !== " ") hiddenIndexes.push(i)
+      }
+   }
+
+   // 🚨 FIX CLAVE
+   if(hiddenIndexes.length >= arr.length){
+      hiddenIndexes = hiddenIndexes.slice(0, arr.length-1)
+   }
+
+   return arr.map((l,i)=> hiddenIndexes.includes(i) ? "_" : l).join("")
+}
+/* =========================
+📚 BUILD BLOCKS
+========================= */
+
+wordDB.forEach(w=>{
+if(!blocksData[w.block]) blocksData[w.block]=[]
+blocksData[w.block].push(w)
+})
+
+const blockSelect=document.getElementById("block")
+const listSelector=document.getElementById("listSelector")
+listSelector.addEventListener("change", () => {
+
+   let block = listSelector.value
+
+   // 🔥 SINCRONIZA CON EL JUEGO (CLAVE REAL)
+   blockSelect.value = block
+
+   if(block === "none"){
+      currentList = []
+      render()
+      return
+   }
+
+   if(blocksData[block]){
+      currentList = [...blocksData[block]]
+      index = 0
+      render()
+   }
+
+})
+
+blockSelect.innerHTML=""
+listSelector.innerHTML='<option value="none">NONE</option>'
+
+for(let b in blocksData){
+
+let name = (typeof blockNames !== "undefined" && blockNames[b])
+? blockNames[b]
+: b
+
+blockSelect.add(new Option(name,b))
+listSelector.add(new Option(name,b))
+
+}
+
+/* =========================
+🧑‍🎨 AVATAR
+========================= */
+
+function setAvatar(state="base"){
+
+let u=avatarSelect.value
+let base=`assets/avatars/${u}/${u}`
+
+let path=base+".png"
+
+if(state==="happy") path=base+"_happy.png"
+if(state==="sad") path=base+"_sad.png"
+
+avatar.src=path
+}
+
+
+function setPlayerAvatar(name){
+
+   if(!playerData[name]){
+      playerData[name] = {
+         mistakes:[],
+         mastery:{},
+         ranking:{
+            bestStreak:0,
+            worstStreak:0,
+            totalCorrect:0,
+            totalWrong:0
+         }
+      }
+   }
+
+currentAvatar = name
+
+let data = playerData[name]
+
+// 🔥 RESET REAL DEL JUEGO
+lives = 5
+shield = 0
+
+// 🔥 sobrescribe lo guardado (CLAVE)
+playerData[currentAvatar].lives = lives
+playerData[currentAvatar].shield = shield
+updateLivesUI()
+
+saveData()
+render()
+}
+
+avatarSelect.onchange=()=>{
+
+   let selected = avatarSelect.value
+
+   if(!selected) return
+
+   setPlayerAvatar(selected)
+   setAvatar()
+
+   avatar.style.display="block"
+   updateRankingUI()
+
+   if(lastWelcomeAvatar !== selected){
+
+      let spokenName = selected === "eithan" ? "Eitan" : "Ian"
+
+      setTimeout(()=>{
+         speakSpanishFemale(`Bienvenido ${spokenName}, comencemos a jugar`)
+      },300)
+
+      lastWelcomeAvatar = selected
+   }
+}
+
+/* =========================
+⚙️ SETTINGS
+========================= */
+
+function applySettings(){
+
+// 🔥 SINCRONIZA SELECTORES
+if(!blockSelect.value || blockSelect.value === ""){
+   blockSelect.value = listSelector.value
+}
+
+let arr=[...(blocksData[blockSelect.value]||[])]
+
+if(imageFilter.value==="images"){
+arr = arr.filter(w => hasImage(w.word))
+}
+
+if(rangeType.value==="custom"){
+
+let f=parseInt(from.value)
+let t=parseInt(to.value)
+
+if(isNaN(f)) f=1
+if(isNaN(t)) t=arr.length
+
+arr=arr.filter(w=>w.num>=f && w.num<=t)
+}
+
+/* 🔥 ESTA PARTE FALTABA */
+if(order.value==="seq"){
+
+   currentList = arr   // 👈 CLAVE
+
+   index = 0
+   correct = 0
+   wrong = 0
+   streak = 0
+
+   updateUI()
+}
+
+/* RANDOM (ya lo tienes bien) */
+if(order.value==="rand"){
+
+   let block = blockSelect.value
+   let today = getToday()
+
+   if(!randomCycle[block] || randomCycle[block].date !== today){
+
+      randomCycle[block] = {
+         phase: "main",
+         pending: shuffleArray(arr.map(w=>w.word)),
+         errors: [],
+         completed: false,
+         date: today
+      }
+   }
+
+   let cycle = randomCycle[block]
+
+   if(cycle.phase === "main"){
+      currentList = cycle.pending
+         .map(word => arr.find(w => w.word === word))
+         .filter(Boolean)
+   }
+
+   if(cycle.phase === "review"){
+      currentList = cycle.errors
+         .map(word => arr.find(w => w.word === word))
+         .filter(Boolean)
+   }
+
+   index = 0
+   correct=0
+   wrong=0
+   streak=0
+
+   saveCycle()
+   updateUI()
+}
+}
+
+function updateLivesUI(){
+
+   let maxVisible = 5
+
+   let displayLives = Math.min(lives, maxVisible)
+
+   let extra = lives - maxVisible
+
+   let html = ""
+
+   // ❤️ vidas normales
+   for(let i=0;i<displayLives;i++){
+      html += `<span class="heart">❤️</span>`
+   }
+
+   // 💖 vidas extra (AQUÍ VA)
+   if(extra > 0){
+      html += ` 💖x${extra}`
+   }
+
+// 🛡️ ESCUDO
+if(shield > 0){
+
+   let shieldClass = "shield1"
+
+   if(shield === 2){
+      shieldClass = "shield2"
+   }
+   else if(shield >= 3){
+      shieldClass = "shield3"
+   }
+
+   html += ` <span class="${shieldClass} shieldUI">🛡️x${shield}</span>`
+}
+
+   document.getElementById("livesUI").innerHTML = html
+
+savePlayerState()
+}
+
+function handleError(){
+
+// 🛡️ SI HAY ESCUDO → BLOQUEA ERROR
+if(shield > 0){
+
+   shield = Math.max(0, shield - 1)
+
+   animateShieldBlock()
+
+   updateLivesUI()
+
+
+   if(shield === 0){
+
+explodeShield()
+      showGIF("assets/gifs/break.gif",1200)
+      safePlay("level")   // 🔥 sonido fuerte
+
+   }else{
+
+      showGIF("assets/gifs/shield.gif",1000)
+     safePlay("level")
+
+   }
+
+   return false
+}
+
+errorCount++
+
+// 🎯 VIDA CADA 5 PALABRAS CON ERROR
+if(errorCount >= 5){
+
+   lives--
+
+   explodeHeart()
+
+   showGIF("assets/gifs/muere.gif",1200)
+
+   safePlay("wrong")
+
+   errorCount -= 5   // 🔥 NO reinicia, acumula
+
+   updateLivesUI()
+
+   if(lives <= 0){
+      showGameOver()
+      return true
+   }
+}
+
+return false
+}
+/* =========================
+📊 UI
+========================= */
+
+function updateUI(){
+
+score.innerText=`Words: ${currentList.length} ✔ ${correct} ❌ ${wrong}`
+
+let starsCount=Math.floor((correct/(currentList.length||1))*5)
+
+stars.innerHTML=""
+
+for(let i=0;i<5;i++){
+stars.innerHTML+= i<starsCount?"★":"☆"
+}
+/* NUEVO SISTEMA XP */
+
+let newLevel=Math.floor(xp/100)+1
+
+if(newLevel>level){
+
+level=newLevel
+
+playSound("level")
+showGIF("assets/gifs/levelup.gif",1500)
+
+speakSpanishFemale("Subiste al nivel "+level)
+
+}
+
+let best = playerData[currentAvatar].ranking.bestStreak || 0
+let block = blockSelect.value
+let cycle = randomCycle[block]
+
+let phaseText = ""
+
+if(order.value === "rand" && cycle){
+   if(cycle.phase === "review"){
+      phaseText = " 🔁 Review"
+   }
+}
+
+levelUI.innerText = `Level ${level} • XP ${xp} | Best: ${best}${phaseText}`
+
+// 🔥 STREAK VISUAL (CORRECTO)
+if(streakUI){
+
+   let fire = "🔥".repeat(Math.min(streak,10))
+   let shieldIcon = shield > 0 ? " 🛡️" : ""
+
+   streakUI.innerText = fire + shieldIcon
+}
+
+}
+
+function renderMasteryBar(){
+
+let w=getCurrentWord()
+if(!w) return
+
+let mastery=getMastery()
+let level=mastery[w.word] || 0
+
+let max=5
+
+let bar=document.createElement("div")
+bar.style.marginTop="10px"
+
+let html=""
+
+for(let i=0;i<max;i++){
+html += i<level ? "🟩" : "⬜"
+}
+
+bar.innerHTML="Mastery: "+html
+
+gameArea.appendChild(bar)
+
+}
+
+function updateProgress(){
+bar.style.width=((progressCount/currentList.length)*100)+"%"
+
+bar.classList.add("progressPop")
+
+setTimeout(()=>{
+   bar.classList.remove("progressPop")
+},200)
+
+}
+
+/* =========================
+🎮 GAME CORE
+========================= */
+
+function startGame(){
+
+// 🔥 ASEGURA QUE EL BLOCK ESTÉ BIEN
+if(!blockSelect.value || blockSelect.value === ""){
+   blockSelect.value = listSelector.value
+}
+
+   if(!avatarSelect.value){
+      alert("Selecciona un jugador primero")
+      return
+   }
+
+   applySettings()
+
+// ✏️ MODO PENCIL UI
+if(mode.value === "pencil"){
+   document.body.classList.add("pencilMode")
+}else{
+   document.body.classList.remove("pencilMode")
+}
+
+   index = 0
+   correct = 0
+   wrong = 0
+   progressCount = 0
+
+   let data = playerData[currentAvatar] || {}
+
+   lives = data.lives ?? 5
+   shield = data.shield ?? 0
+
+   updateLivesUI()   // 👈 aquí ya guarda automáticamente
+
+   errorCount = 0
+
+   render()
+}
+
+function setModeTheme(mode){
+   // 🔥 DESACTIVADO PARA EVITAR CAMBIO DE COLOR
+}
+
+const themes={
+typing:"linear-gradient(#4facfe,#00f2fe)",
+build:"linear-gradient(#43e97b,#38f9d7)",
+speed:"linear-gradient(#fa709a,#fee140)",
+memory:"linear-gradient(#a18cd1,#fbc2eb)",
+mc:"linear-gradient(#f093fb,#f5576c)",
+image:"linear-gradient(#30cfd0,#330867)",
+practice:"linear-gradient(#667eea,#764ba2)"
+}
+
+function render(){
+
+   output.innerHTML = ""
+   gameArea.innerHTML = ""
+
+   // 🔥 STREAK BAR UI
+   if(!streakUI){
+
+      streakUI = document.createElement("div")
+
+      streakUI.style.position="absolute"
+      streakUI.style.top="10px"
+      streakUI.style.left="50%"
+      streakUI.style.transform="translateX(-50%)"
+      streakUI.style.fontSize="22px"
+      streakUI.style.fontWeight="bold"
+      streakUI.style.color="#e67e22"
+      streakUI.style.zIndex="50"
+
+      document.querySelector(".card").appendChild(streakUI)
+   }
+
+   answered = false
+
+   setTimeout(()=>{
+      gameArea.style.opacity=1
+      gameArea.style.transform="scale(1)"
+   },100)
+
+   hintCounter = {}
+
+   el.typingContainer.style.display="none"
+
+   // 🔥 FIX CRÍTICO (ESTO TE FALTABA)
+   if(!currentList || currentList.length === 0){
+      return
+   }
+
+   let w = getCurrentWord()
+
+   if(mode.value==="speed"){
+      renderSpeedRun()
+      return
+   }
+
+   if(!w){
+      gameArea.innerHTML="<h2>🏁 Finished</h2>"
+      return
+   }
+
+   word.innerText="_____"
+
+   updateProgress()
+
+   // =========================
+   // 🎮 MODOS
+   // =========================
+
+  if(mode.value==="typing" || mode.value==="pencil"){
+   renderTyping(w)
+}
+
+   if(mode.value==="mc"){
+      renderMC(w)
+   }
+
+   if(mode.value==="image"){
+      try{
+         renderImage(w)
+      }catch(e){
+         console.error("Image Mode error:", e)
+      }
+   }
+
+   if(mode.value==="memory"){
+      try{
+         renderMemoryMatch()
+      }catch(e){
+         console.error("Memory Match error:", e)
+      }
+   }
+
+   if(mode.value==="build"){
+      renderBuildWord(w)
+   }
+
+   if(mode.value==="fill"){
+      renderFillGap(w)
+   }
+
+   if(mode.value==="practice"){
+      renderPracticeMode()
+   }
+
+   if(mode.value !== "speed"){
+      speak(w.word)
+   }
+
+   gameArea.style.opacity = 0
+   gameArea.style.transform = "scale(0.95)"
+
+   setTimeout(()=>{
+      gameArea.style.opacity = 1
+      gameArea.style.transform = "scale(1)"
+   },150)
+
+   // 🔥 ANIMACIÓN SUAVE
+   let card = document.querySelector(".card")
+
+   if(card){
+      card.classList.remove("fade")
+      void card.offsetWidth
+      card.classList.add("fade")
+   }
+}
+
+// =========================
+// 🧠 WEIGHTED WORD SELECTOR
+// =========================
+
+function getWordWeight(word){
+
+   let data = getMastery()[word]
+
+   if(!data){
+      return 4   // 🔥 NUEVA palabra = prioridad media-alta
+   }
+
+   let score = data.score
+   let fails = data.fails || 0
+
+   let weight = 1
+
+   if(score <= 2) weight = 5
+   else if(score <= 5) weight = 3
+   else if(score <= 8) weight = 1.5
+   else weight = 0.5
+
+   // 🚨 errores pesan MÁS que antes
+   weight += fails * 2
+
+   return weight
+}
+
+function getWeightedWord(list){
+
+let now = Date.now()
+
+// 🔥 solo palabras listas para revisión
+let filtered = list.filter(item => {
+
+   let data = getMastery()[item.word]
+
+   // ❌ excluir palabras dominadas
+   if(data && data.mastered){
+      return false
+   }
+
+   if(!data) return true
+
+   return !data.nextReview || data.nextReview <= now
+})
+
+// fallback si ninguna cumple
+if(filtered.length === 0){
+
+   // 🔥 fallback inteligente (no solo random)
+   filtered = list.sort((a,b)=>{
+      let wa = getWordWeight(a.word)
+      let wb = getWordWeight(b.word)
+      return wb - wa
+   }).slice(0, Math.ceil(list.length * 0.5))
+}
+
+   let weighted = []
+
+  filtered.forEach(item => {
+
+      let weight = getWordWeight(item.word)
+
+      // 🔥 multiplicamos la probabilidad
+      for(let i=0;i<Math.floor(weight);i++){
+         weighted.push(item)
+      }
+
+   })
+
+   // 🛑 seguridad (nunca vacío)
+   if(weighted.length === 0){
+      return list[Math.floor(Math.random()*list.length)]
+   }
+
+   return weighted[Math.floor(Math.random() * weighted.length)]
+}
+
+function explodeShield(){
+
+   let el = document.getElementById("livesUI")
+   if(!el) return
+
+   el.classList.add("shieldExplode")
+
+   setTimeout(()=>{
+      el.classList.remove("shieldExplode")
+   },500)
+}
+
+
+
+/* =========================
+🧭 NAVIGATION
+========================= */
+
+function nextWord(){
+
+   // =========================
+   // 🔹 SEQUENTIAL MODE
+   // =========================
+   if(order.value === "seq"){
+
+      index++
+
+      if(index < currentList.length){
+         render()
+      }
+
+      return
+   }
+
+   // =========================
+   // 🔥 RANDOM + IA ADAPTATIVA
+   // =========================
+   if(order.value === "rand"){
+
+      let selected = getWeightedWord(currentList)
+
+      let newIndex = currentList.findIndex(w => w.word === selected.word)
+
+      if(newIndex !== -1){
+         index = newIndex
+      }
+
+      render()
+      return
+   }
+}
+
+function prevWord(){
+index--
+if(index<0) index=0
+render()
+}
+
+function repeatWord(){
+
+let wordObj = getCurrentWord()
+
+if(wordObj){
+speak(wordObj.word)
+
+let wEl = el.word
+
+if(wEl){
+wEl.classList.add("wordSpeaking")
+
+setTimeout(()=>{
+wEl.classList.remove("wordSpeaking")
+},500)
+}
+}
+
+}
+
+let practiceVisible=false
+
+function refocusInput(){
+
+   if(mode.value !== "typing" && mode.value !== "pencil") return
+
+   requestAnimationFrame(()=>{
+      el.typingInput?.focus()
+   })
+}
+
+window.visualViewport?.addEventListener("resize", () => {
+
+   if(mode.value === "typing" || mode.value === "pencil"){
+
+      setTimeout(()=>{
+
+         if(el?.typingInput){
+          if(window.innerWidth > window.innerHeight){
+   el.typingInput.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+
+   })
+}
+         }
+
+      },150)
+   }
+
+})
+
+function practiceMistakes(){
+
+if(practiceVisible){
+wordList.innerHTML=""
+practiceVisible=false
+return
+}
+
+let mistakes=getMistakes()
+let mastery=getMastery()
+
+let list=mistakes.map(word=>{
+
+let m=mastery[word]||0
+
+let status="🟥 Débil"
+
+if(m>=2) status="🟨 En progreso"
+if(m>=4) status="🟩 Dominada"
+
+return {
+word,
+mastery:m,
+status
+}
+
+}).filter(x=>x.mastery<4)
+
+wordList.innerHTML=list.map(x=>`
+<div style="padding:6px;border-bottom:1px solid #ddd;">
+${x.word} → ${x.status} (${x.mastery})
+</div>
+`).join("")
+
+practiceVisible=true
+
+}
+/* =========================
+🎯 CHECK ANSWER (PRO)
+========================= */
+
+function checkAnswer(answer){
+
+if(answered) return
+answered = true
+
+let obj = getCurrentWord()
+if(!obj) return
+
+let hadError = answer === "error"
+let correctWord = obj.word
+let userInput = answer.replace(/^\s+|\s+$/g, "")
+let isCorrect = !hadError && userInput === correctWord
+
+// =========================
+// 🧠 RANDOM CYCLE TRACKING
+// =========================
+
+let block = blockSelect.value
+let cycle = randomCycle[block]
+
+if(order.value === "rand" && cycle){
+
+   let currentWord = getCurrentWord().word
+
+   // 🔥 quitar de pendientes (MAIN)
+   cycle.pending = cycle.pending.filter(w => w !== currentWord)
+
+   if(isCorrect){
+
+      // ✅ quitar de errores si ya lo aprendió
+      cycle.errors = cycle.errors.filter(w => w !== currentWord)
+
+   }else{
+
+      // ❌ agregar a errores si falla
+      if(!cycle.errors.includes(currentWord)){
+         cycle.errors.push(currentWord)
+      }
+   }
+
+   saveCycle()
+}
+
+
+// 🔥 progreso SIEMPRE
+progressCount++
+
+updateMastery(correctWord, isCorrect)
+
+if(isCorrect){
+
+   // showCorrectFX()  // 🔥 quitado
+   correct++
+streak++
+
+// 🎉 CONFETTI EN EL MOMENTO CORRECTO
+if(streak >= 5){
+   showConfettiExplosion()
+}
+
+// 🔥 FIRE MODE
+if(streak >= 8){
+
+   showCombo("🔥 FIRE!", true)
+}
+
+// ❤️ VIDA + 🛡️ ESCUDO
+if(streak % 10 === 0){
+
+   // ❤️ siempre suma vida (sin límite)
+   lives++
+
+   updateLivesUI()
+
+   shield++
+
+savePlayerState()
+
+animateShieldGain()
+
+
+   showGIF("assets/gifs/vida.gif",1500)
+   safePlay("level")
+}
+
+
+   setAvatar("happy")
+   if(hadError){
+   safePlay("level")   // sonido suave (corrigió)
+}else{
+   safePlay("correct") // sonido fuerte (perfecto)
+}
+
+
+
+// 🧠 LIMPIAR ERRORES SI YA APRENDIÓ
+
+// quitar de wrongWords (errores recientes)
+wrongWords = wrongWords.filter(w => w !== correctWord)
+
+// quitar de mistakes (histórico del jugador)
+let mistakes = getMistakes()
+
+playerData[currentAvatar].mistakes = mistakes.filter(w => w !== correctWord)
+
+}else{
+
+showErrorFX()
+
+   wrong++
+   streak = 0
+
+// safePlay("wrong")
+
+   let result = handleError()
+
+   if(result) return
+}
+
+updateStats(isCorrect)
+
+// 🎬 GIFS
+if(isCorrect){
+
+   if(streak < 5){
+      showGIF("assets/gifs/happy.gif")
+
+   }else if(streak === 15){
+      showGIF("assets/gifs/pocoyo.gif",1500)
+
+   }else if(streak === 21){
+      showGIF("assets/gifs/ganador.gif",2000)
+   }
+}
+// 🔥 SIEMPRE
+updateUI()
+updateProgress()
+saveData()
+
+if(order.value === "rand"){
+   saveCycle()
+}
+
+}
+
+/* =========================
+🎯 BOTONES
+========================= */
+
+function showWord(){
+
+let w=getCurrentWord()
+if(!w) return
+
+word.innerText = w.word
+speak(w.word)
+
+}
+
+function showDefinition(){
+
+let w=getCurrentWord()
+if(!w) return
+
+/* iniciar contador si no existe */
+if(!hintCounter[w.word]){
+hintCounter[w.word]=0
+}
+
+/* sumar clic */
+hintCounter[w.word]++
+
+/* 🔊 SIEMPRE AUDIO */
+speak(w.def || w.definition,0.75)
+
+/* 📖 SOLO DESPUÉS DE 3 INTENTOS */
+if(hintCounter[w.word] >= 4){
+
+output.innerHTML=`<b style="color:#e74c3c">Definition:</b><br>${w.def || w.definition}`
+
+}else{
+
+output.innerHTML="🔊 Listen carefully..."
+
+}
+
+}
+
+function showMeaning(){
+let w=getCurrentWord()
+if(!w) return
+output.innerHTML=`<b style="color:#16a085">Meaning:</b><br>${w.mean}`
+speakSpanishFemale(w.mean)
+}
+
+function showSentence(){
+
+let w=getCurrentWord()
+if(!w) return
+
+if(!hintCounter[w.word]){
+hintCounter[w.word]=0
+}
+
+hintCounter[w.word]++
+
+/* 🔊 AUDIO */
+speak(w.sent || w.sentence,0.75)
+
+/* 📖 BLOQUEO PROGRESIVO */
+if(hintCounter[w.word] >= 4){
+
+output.innerHTML=`<b style="color:#f39c12">Sentence:</b><br>${w.sent || w.sentence}`
+
+}else{
+
+output.innerHTML="🔊 Listen carefully..."
+
+}
+
+}
+
+function showImage(){
+
+output.innerHTML=""   // 👈 LIMPIA
+
+let w=getCurrentWord()
+if(!w) return
+
+let path=getImagePath(w.word)
+
+output.innerHTML = `
+<img class="dictImage"
+     src="${path}"
+     style="${path ? '' : 'display:none'}"
+     onerror="this.style.display='none'">
+`
+
+}
+
+/* =========================
+⌨️ TYPING MODE PRO
+========================= */
+function renderTyping(w){
+
+   // 🛑 limpiar eventos
+   el.typingInput.onkeydown = null
+   el.typingInput.oninput = null
+
+   el.typingContainer.style.display = "flex"
+
+   el.typingInput.disabled = false
+   el.typingInput.value = ""
+   el.typingInput.focus()
+
+let correctWord = w.word
+let currentIndex = 0
+let hasError = false
+let wordErrorCounted = false
+let lastValue = ""   // ✅ antes de usarlo
+
+   el.letterFeedback.innerHTML = ""
+
+   setTimeout(()=>{
+      el.typingInput.scrollIntoView({
+         behavior:"smooth",
+         block:"center"
+      })
+   },200)
+
+
+   // ✏️ APPLE PENCIL (Scribble)
+el.typingInput.oninput = ()=>{
+
+  let value = el.typingInput.value
+
+// 🔥 FIX ANTI-DUPLICADOS (AQUÍ VA)
+if(value === lastValue) return
+lastValue = value
+
+if(!value) return
+
+   let newText = value.slice(currentIndex)
+   if(!newText) return
+
+   for(let i = 0; i < newText.length; i++){
+
+    let rawLetter = newText[i]
+
+// 🔥 NORMALIZAR ERRORES DE SCRIBBLE (AQUÍ EXACTO)
+const scribbleMap = {
+   "0": "o",
+   "6": "b",
+   "1": "l",
+   "5": "s",
+   "2": "z"
+}
+
+if(scribbleMap[rawLetter]){
+   rawLetter = scribbleMap[rawLetter]
+}
+
+let letter = rawLetter.toLowerCase()
+
+      if(currentIndex >= correctWord.length) break
+
+      let expected = correctWord[currentIndex]
+      let expectedLower = expected.toLowerCase()
+
+      // 🧠 CASO 1: MISMA LETRA (ignora mayúscula)
+      if(letter === expectedLower){
+
+         // 🔥 VALIDACIÓN DE FORMATO REAL
+         if(rawLetter !== expected){
+
+            // 👉 EXCEPCIÓN SOLO PARA PRIMERA LETRA (iPad)
+            if(currentIndex === 0){
+
+               // ⚠️ NO marcar error inmediato
+               currentIndex++
+               updateFeedback()
+               continue
+            }
+
+            // ❌ error real de formato
+            hasError = true
+            safePlay("wrong")
+
+            if(currentIndex < correctWord.length - 1){
+               shakeScreen([
+                  {transform:"translateX(-6px)"},
+                  {transform:"translateX(6px)"},
+                  {transform:"translateX(0)"}
+               ],{duration:120})
+            }
+
+            flashError(rawLetter)
+            continue
+         }
+
+         // ✅ CORRECTO TOTAL
+         currentIndex++
+         updateFeedback()
+
+      }else{
+
+         // ❌ ERROR REAL
+         hasError = true
+         safePlay("wrong")
+
+         if(currentIndex < correctWord.length - 1){
+            shakeScreen([
+               {transform:"translateX(-6px)"},
+               {transform:"translateX(6px)"},
+               {transform:"translateX(0)"}
+            ],{duration:120})
+         }
+
+         flashError(rawLetter)
+      }
+   }
+
+   // 🔥 evitar overflow
+   if(currentIndex > correctWord.length){
+      currentIndex = correctWord.length
+   }
+
+   // 🔥 controlar lo que se muestra
+   el.typingInput.value = correctWord.slice(0, currentIndex)
+
+   // 🎯 TERMINÓ PALABRA
+   if(currentIndex === correctWord.length){
+
+      el.typingInput.disabled = true
+
+      if(hasError){
+         checkAnswer("error")
+      }else{
+         checkAnswer(correctWord)
+      }
+
+      celebrateSuccess()
+      showGIF("assets/gifs/happy.gif")
+      safePlay("correct")
+
+      setAvatar(hasError ? "sad" : "happy")
+
+      setTimeout(()=>{
+         el.typingInput.disabled = false
+         advanceGame()
+      }, TRANSITION_TIME)
+   }
+}
+
+
+   // 🟢 feedback visual correcto
+   function updateFeedback(){
+      let html = ""
+      for(let i=0; i < currentIndex && i < correctWord.length; i++){
+   html += `<span class="correctLetter">${correctWord[i]}</span>`
+}
+      el.letterFeedback.innerHTML = html
+   }
+
+   // 🔴 feedback error
+   function flashError(letter){
+      let span = document.createElement("span")
+      span.className = "wrongLetter"
+      span.innerText = letter
+      el.letterFeedback.appendChild(span)
+
+      setTimeout(()=>{
+         span.remove()
+      },300)
+   }
+}
+
+/* =========================
+🧠 MULTIPLE CHOICE PRO (ADULTO)
+========================= */
+function phoneticSimilarity(a,b){
+
+a=a.toLowerCase()
+b=b.toLowerCase()
+
+let score=0
+
+for(let i=0;i<Math.min(a.length,b.length);i++){
+if(a[i]===b[i]) score++
+}
+
+return score
+}
+function renderMC(w){
+
+let pool=wordDB.filter(x=>x.word!==w.word)
+
+let similar = pool.filter(x=>{
+
+   let a = x.word.toLowerCase()
+   let b = w.word.toLowerCase()
+
+   let lenDiff = Math.abs(a.length - b.length)
+
+   // misma longitud o muy cercana
+   let lengthCheck = lenDiff <= 1
+
+   // mismo inicio (muy importante para dificultad)
+   let startCheck = a[0] === b[0]
+
+   // similitud fonética básica
+   let phonScore = phoneticSimilarity(a,b) >= Math.floor(b.length * 0.5)
+
+   // letras similares (al menos 50% iguales)
+   let common = 0
+   for(let i=0;i<Math.min(a.length,b.length);i++){
+      if(a[i] === b[i]) common++
+   }
+
+   let similarityCheck = common >= Math.floor(b.length * 0.5)
+
+   return lengthCheck && (startCheck || phonScore || similarityCheck)
+})
+
+let difficulty = getDifficulty(w.word)
+
+if(difficulty === "hard"){
+
+   similar = similar.sort((a,b)=>
+      phoneticSimilarity(b.word,w.word) - phoneticSimilarity(a.word,w.word)
+   ).slice(0,6)
+
+}
+
+let opts=[w.word]
+
+// primero intentar con similares
+let maxOptions = difficulty === "hard" ? 6 : 4
+
+// 🔥 SAFE GENERATION (ANTI FREEZE)
+let attempts = 0
+
+while(opts.length < maxOptions && attempts < 20){
+
+   let source = similar.length ? similar : pool
+
+   let r = source[Math.floor(Math.random()*source.length)].word
+
+   if(!opts.includes(r)){
+      opts.push(r)
+   }
+
+   attempts++
+}
+
+// fallback seguro
+while(opts.length < 4){
+
+   let r = pool[Math.floor(Math.random()*pool.length)].word
+
+   if(!opts.includes(r)){
+      opts.push(r)
+   }
+}
+
+opts=opts.sort(()=>Math.random()-0.5)
+
+opts.forEach(o=>{
+
+let d=document.createElement("div")
+d.className="option"
+d.innerText=o
+
+d.onclick=()=>{
+
+if(answered) return
+
+document.querySelectorAll(".option").forEach(el=>{
+   el.style.pointerEvents = "none"
+})
+
+checkAnswer(o)
+
+setTimeout(()=>advanceGame(),400)
+}
+gameArea.appendChild(d)
+
+})
+}
+
+/* =========================
+🖼️ IMAGE MODE PRO (ESTABLE)
+========================= */
+function renderImage(w){
+
+// si la palabra actual no tiene imagen, saltar
+if(!hasImage(w.word)){
+advanceGame()
+return
+}
+
+// pool solo con palabras que tengan imagen
+let pool = wordDB.filter(x => hasImage(x.word) && x.word !== w.word)
+
+// mezclar pool
+pool = pool.sort(()=>Math.random()-0.5)
+
+// tomar solo 3 distractores
+let distractors = pool.slice(0,3).map(x=>x.word)
+
+// opciones finales
+let opts = [w.word, ...distractors]
+
+// mezclar opciones
+opts = opts.sort(()=>Math.random()-0.5)
+
+// crear grid
+let grid=document.createElement("div")
+grid.className="imageGrid"
+
+// render
+opts.forEach(o=>{
+
+let d=document.createElement("div")
+d.className="imageOption"
+
+let img=document.createElement("img")
+img.src=getImagePath(o)
+
+img.onerror=()=>{
+img.src="assets/images/default.png"
+}
+
+d.appendChild(img)
+
+d.onclick=()=>{
+
+if(answered) return
+
+
+document.querySelectorAll(".imageOption").forEach(el=>{
+   el.style.pointerEvents = "none"
+})
+
+checkAnswer(o)
+
+setTimeout(()=>advanceGame(),400)
+}
+
+grid.appendChild(d)   // ✅ AQUÍ ADENTRO
+})
+
+gameArea.appendChild(grid)
+
+}
+
+function createMatchParticles(card){
+
+for(let i=0;i<6;i++){
+
+let p=document.createElement("div")
+
+p.style.position="absolute"
+p.style.width="8px"
+p.style.height="8px"
+p.style.background="#f1c40f"
+p.style.borderRadius="50%"
+p.style.pointerEvents="none"
+
+let rect=card.getBoundingClientRect()
+
+p.style.left=rect.left+rect.width/2+"px"
+p.style.top=rect.top+rect.height/2+"px"
+
+document.body.appendChild(p)
+
+let angle=Math.random()*Math.PI*2
+let dist=40+Math.random()*40
+
+let x=Math.cos(angle)*dist
+let y=Math.sin(angle)*dist
+
+p.animate([
+{transform:"translate(0,0)",opacity:1},
+{transform:`translate(${x}px,${y}px)`,opacity:0}
+],{
+duration:600,
+easing:"ease-out"
+})
+
+setTimeout(()=>p.remove(),600)
+
+}
+
+}
+
+/* =========================
+🔤 BUILD WORD MODE
+========================= */
+
+function scramble(word){
+return word.split("").sort(()=>Math.random()-0.5)
+}
+
+function renderBuildWord(w){
+
+function getConfusingLetters(letter){
+
+   const map = {
+      a: ["e","o"],
+      b: ["d","p"],
+      c: ["k","s"],
+      d: ["b"],
+      e: ["a","i"],
+      f: ["p"],   // 🔥 cambiado (antes "ph")
+      g: ["j"],
+      h: ["l"],
+      i: ["e","y"],
+      j: ["g"],
+      k: ["c"],
+      l: ["i"],
+      m: ["n"],
+      n: ["m"],
+      o: ["a","u"],
+      p: ["b","q","f"], // 🔥 agregamos f aquí
+      q: ["p"],
+      r: ["l"],
+      s: ["c","z"],
+      t: ["d"],
+      u: ["o"],
+      v: ["b"],
+      w: ["v"],
+      x: ["s","z"], // 🔥 cambiado (antes "ks")
+      y: ["i"],
+      z: ["s"]
+   }
+
+   let lower = letter.toLowerCase()
+
+   return map[lower] || []
+}
+   let correctWord = w.word
+   let currentIndex = 0
+   let hasError = false
+let inputLocked = false
+
+   el.gameArea.innerHTML = ""
+
+   // 🔤 DISPLAY (igual que typing visual)
+   let displayBox = document.createElement("div")
+let difficulty = getDifficulty(correctWord)
+   displayBox.style.fontSize = "50px"
+   displayBox.style.margin = "20px"
+   displayBox.style.fontWeight = "bold"
+
+   el.gameArea.appendChild(displayBox)
+
+   function updateDisplay(){
+
+   let html = ""
+
+   for(let i=0;i<currentIndex;i++){
+
+      let l = correctWord[i]
+
+      html += `<span style="color:#2ecc71">${l===" "?"&nbsp;":l}</span> `
+   }
+
+   displayBox.innerHTML = html
+}
+
+   if(difficulty === "hard"){
+   displayBox.innerHTML = "_ ".repeat(correctWord.length)
+}else{
+   updateDisplay()
+}
+
+   // 🔤 LETRAS DESORDENADAS
+ let baseLetters = correctWord.split("")
+
+let extra = 2
+if(difficulty==="medium") extra = 4
+if(difficulty==="hard") extra = 6
+
+// 🔥 letras confusas
+let extraLetters = []
+
+baseLetters.forEach(l=>{
+   let confusions = getConfusingLetters(l)
+
+   if(confusions.length){
+      let pick = confusions[Math.floor(Math.random()*confusions.length)]
+      extraLetters.push(pick)
+   }
+})
+
+// 🔥 SIEMPRE incluir TODAS las letras reales
+let allLetters = [...baseLetters]
+
+
+
+baseLetters.forEach(l=>{
+   let confusions = getConfusingLetters(l)
+
+   if(confusions.length){
+      let pick = confusions[Math.floor(Math.random()*confusions.length)]
+      extraLetters.push(pick)
+   }
+})
+
+// 🔥 agregar extras según dificultad
+for(let i=0;i<extra;i++){
+
+   let alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+   let rand = alphabet[Math.floor(Math.random()*alphabet.length)]
+
+   extraLetters.push(rand)
+}
+
+// 🔥 asegurar letras reales SIEMPRE
+baseLetters.forEach(l=>{
+   if(!allLetters.includes(l)){
+      allLetters.push(l)
+   }
+})
+
+// 🔥 unir todo
+allLetters = allLetters.concat(extraLetters)
+
+// 🔀 shuffle
+let shuffled = allLetters.sort(()=>Math.random()-0.5)
+
+   let optionsBox = document.createElement("div")
+   optionsBox.style.marginTop = "20px"
+
+   shuffled.forEach(letter=>{
+
+      let btn = document.createElement("button")
+
+      btn.textContent = letter === " " ? "␣" : letter
+
+      // 🎨 ESTILO AZUL
+      btn.style.background = "#0984e3"
+btn.style.boxShadow="0 6px 0 #0652DD"
+      btn.style.fontSize = "26px"
+      btn.style.padding = "14px 18px"
+      btn.style.borderRadius = "16px"
+      btn.style.margin = "6px"
+
+     btn.onclick = ()=>{
+
+   if(inputLocked) return   // 🔒 evita doble ejecución
+
+   let expected = correctWord[currentIndex]
+   if(expected === undefined) return
+
+   if(letter === expected){
+
+      if(difficulty !== "hard"){
+   btn.style.background = "#2ecc71"
+}
+
+      currentIndex++
+      updateDisplay()
+
+   }else{
+
+      safePlay("wrong")
+
+      if(handleError()) return   // 🔥 AHORA CUENTA ERRORES REALES
+
+      shakeScreen([
+         {transform:"translateX(-5px)"},
+         {transform:"translateX(5px)"},
+         {transform:"translateX(0)"}
+      ],{duration:120})
+
+      btn.style.background = "#e74c3c"
+
+      if(!hasError){
+         hasError = true
+
+         let mistakes = getMistakes()
+         if(!mistakes.includes(correctWord)){
+            mistakes.push(correctWord)
+            saveData()
+         }
+      }
+
+      setTimeout(()=>{
+         btn.style.background = "#0984e3"
+      },300)
+
+      return
+   }
+
+   if(currentIndex === correctWord.length){
+
+      inputLocked = true   // 🔒 CLAVE
+
+      celebrateSuccess()
+      showGIF("assets/gifs/happy.gif")
+
+      safePlay("correct")
+
+      let realWord = correctWord
+
+      checkAnswer(hasError ? "error" : correctWord)
+
+              setAvatar(hasError ? "sad" : "happy")
+
+      setTimeout(()=>advanceGame(), TRANSITION_TIME)
+   }
+}
+
+      optionsBox.appendChild(btn)
+   })
+
+   el.gameArea.appendChild(optionsBox)
+}
+function renderPracticeMode(){
+
+let mastery = getMastery()
+
+let mistakes = getMistakes()
+
+// 🔥 combinar errores + débiles
+let practiceList = wordDB.filter(w => {
+
+   let m = mastery[w.word]?.score || 0
+
+   return m < 4 || mistakes.includes(w.word)
+})
+
+// 🔥 ordenar por dificultad real
+practiceList.sort((a,b)=>{
+   let ma = mastery[a.word]?.score || 0
+   let mb = mastery[b.word]?.score || 0
+   return ma - mb
+})
+
+if(!practiceList.length){
+   gameArea.innerHTML="<h2>🏆 ¡Todo dominado!</h2>"
+   return
+}
+
+let w = practiceList[index % practiceList.length]
+
+word.innerText="_____"
+speak(w.word)
+
+updateProgress()
+
+renderTyping(w)
+}
+
+// 🎯 FILL THE GAP MODE
+
+// 🎯 FILL THE GAP PRO (SIN INPUT)
+
+
+function renderFillGap(w){
+
+   el.gameArea.innerHTML=""
+
+   if(!w || !w.word){
+      console.error("🚨 ERROR: word undefined en FillGap")
+      return
+   }
+
+   let correctWord = w.word
+   let masked = hideLetters(correctWord)
+let difficulty = getDifficulty(correctWord)
+
+   let maskedArray = masked.split("")
+   let currentIndex = 0
+   let hasError = false
+
+   // 📍 DISPLAY
+   let display = document.createElement("div")
+   display.style.fontSize="50px"
+   display.style.letterSpacing="10px"
+   display.style.marginBottom="20px"
+   display.style.fontWeight="bold"
+
+   el.gameArea.appendChild(display)
+
+   function updateDisplay(){
+
+      let html=""
+
+      for(let i=0;i<maskedArray.length;i++){
+
+         let l = maskedArray[i]
+
+         if(l === "_"){
+            html += `<span style="color:#0984e3">_</span> `
+         }else{
+            html += `<span style="color:#2ecc71">${l===" "?"&nbsp;":l}</span> `
+         }
+      }
+
+      display.innerHTML = html
+   }
+
+   updateDisplay()
+
+   function moveToNextGap(){
+      while(maskedArray[currentIndex] !== "_" && currentIndex < correctWord.length){
+         currentIndex++
+      }
+   }
+
+   moveToNextGap()
+
+  function fillHandler(e){
+
+   if(e.key.length !== 1) return
+
+   let keyPressed = e.key
+   let expected = correctWord[currentIndex]
+
+   if(expected === undefined) return
+
+   if(keyPressed.toLowerCase() === expected.toLowerCase()){
+
+      maskedArray[currentIndex] = keyPressed
+
+      currentIndex++
+      moveToNextGap()
+
+      updateDisplay()
+
+ }else{
+
+   // 🔊 sonido SIEMPRE en error
+   safePlay("wrong")
+
+   let result = handleError()
+if(result) return
+
+      shakeScreen([
+         {transform:"translateX(-5px)"},
+         {transform:"translateX(5px)"},
+         {transform:"translateX(0)"}
+      ],{duration:120})
+
+      display.style.color="#e74c3c"
+
+      if(!hasError){
+         hasError = true
+
+         let mistakes = getMistakes()
+         if(!mistakes.includes(correctWord)){
+            mistakes.push(correctWord)
+            saveData()
+         }
+      }
+
+      setTimeout(()=>{
+         display.style.color="#000"
+      },300)
+
+      return
+   }
+
+   if(currentIndex >= correctWord.length){
+
+   celebrateSuccess()
+
+   // 🔊 SIEMPRE suena correcto al completar
+   safePlay("correct")
+
+   // ❌ pero la lógica depende del error
+   checkAnswer(hasError ? "error" : correctWord)
+
+      setAvatar(hasError ? "sad" : "happy")
+
+      document.removeEventListener("keydown", fillHandler)
+
+      setTimeout(()=>advanceGame(), TRANSITION_TIME)
+   }
+}
+
+   // 🔥 ACTIVAR
+  document.removeEventListener("keydown", fillHandler)
+document.addEventListener("keydown", fillHandler)
+}
+
+/* =========================
+🌐 VALIDACIÓN EXTERNA + IA SPEED RUN
+========================= */
+
+let globalUsedWords = new Set()
+let usedWords = new Set()   // 👈 ESTA LÍNEA FALTA
+
+async function isValidWordAPI(word){
+
+try{
+
+let res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+return res.ok
+
+}catch(e){
+return false
+}
+
+}
+
+function getLetterBonus(letter){
+
+letter = letter.toLowerCase()
+
+let hard = ["q","z","x","j"]
+let medium = ["k","v","w","y"]
+
+if(hard.includes(letter)) return 1
+if(medium.includes(letter)) return 0.5
+
+return 0
+}
+
+function getAdaptiveAlphabet(){
+
+let mastery = getMastery()
+
+let weakLetters = {}
+
+wordDB.forEach(w=>{
+
+let m = mastery[w.word] || 0
+
+if(m < 2){
+
+let first = w.word[0].toLowerCase()
+
+if(!weakLetters[first]) weakLetters[first]=0
+
+weakLetters[first]++
+
+}
+
+})
+
+let letters = []
+
+for(let l in weakLetters){
+for(let i=0;i<weakLetters[l];i++){
+letters.push(l)
+}
+}
+
+if(letters.length < 10){
+return "abcdefghijklmnopqrstuvwxyz".split("")
+}
+
+return letters
+}
+
+/* =========================
+⚡ SPEED RUN ENGINE
+========================= */
+
+function startSpeedGame(input, timerUI, scoreUI){
+
+speedTime=60
+speedScore=0
+speedTotal=0
+usedWords.clear()
+
+input.disabled=false
+input.focus()
+
+/* ⚠️ limpiar eventos previos */
+input.onkeydown=null
+
+/* ⏱ TIMER */
+
+if(speedTimer) clearInterval(speedTimer)
+
+speedTimer=setInterval(()=>{
+
+speedTime--
+timerUI.innerText="Time: "+speedTime
+
+if(speedTime<=0){
+
+clearInterval(speedTimer)
+input.disabled=true
+
+showSpeedResult()
+
+}
+
+},1000) // ✅ AQUÍ se cierra correctamente
+
+/* =========================
+VALIDACIÓN (FUERA DEL TIMER)
+========================= */
+
+input.onkeydown = async function(e){
+
+   if(e.key==="Enter"){
+
+      let val=input.value
+      input.value=""
+
+      let clean = val.trim()
+
+      // ❌ caracteres inválidos
+      if(!/^[a-zA-Z\s-]+$/.test(clean)){
+         safePlay("wrong")
+         return
+      }
+
+      let normalized = clean.toLowerCase()
+
+      if(clean.length > 15){
+         safePlay("wrong")
+         return
+      }
+
+      if(globalUsedWords.has(clean)){
+         safePlay("wrong")
+         return
+      }
+
+
+if(usedWords.size > 200){
+   usedWords.clear()
+}
+
+      if(usedWords.has(clean)){
+         safePlay("wrong")
+         return
+      }
+
+      // 🔤 validar letra inicial
+      if(!normalized.startsWith(speedLetter.toLowerCase())){
+         safePlay("wrong")
+         return
+      }
+
+      // 🌐 VALIDACIÓN
+      let existsDB = wordDB.some(w => w.word === clean)
+
+      let existsAPI = false
+
+
+      let exists = existsDB || existsAPI
+
+      speedTotal++
+
+      if(exists){
+
+         globalUsedWords.add(clean)
+         usedWords.add(clean)
+
+         speedCombo++
+
+         let letterBonus = getLetterBonus(speedLetter)
+         let points = 1 + (speedCombo * 0.2) + letterBonus
+
+         speedScore += Math.floor(points)
+
+         let tag=document.createElement("span")
+         tag.innerText=clean
+         tag.style.background="#2ecc71"
+         tag.style.color="white"
+         tag.style.padding="4px 8px"
+         tag.style.borderRadius="8px"
+
+         wordsBox.appendChild(tag)
+
+         safePlay("correct")
+
+      }else{
+
+         safePlay("wrong")
+         speedCombo = 0
+      }
+
+      scoreUI.innerText = speedScore+" / "+speedTotal
+
+      showCombo(`x${speedCombo}`, speedCombo>=5)
+   }
+}
+
+}
+
+function showSpeedResult(){
+
+let result=document.createElement("div")
+
+result.style.position="absolute"
+result.style.top="50%"
+result.style.left="50%"
+result.style.transform="translate(-50%,-50%)"
+result.style.background="white"
+result.style.padding="25px"
+result.style.borderRadius="20px"
+result.style.boxShadow="0 10px 25px rgba(0,0,0,0.3)"
+result.style.textAlign="center"
+
+let accuracy = speedTotal ? Math.round((speedScore/speedTotal)*100) : 0
+
+result.innerHTML=`
+<h2>🏆 RESULT</h2>
+<p>Score: ${speedScore}</p>
+<p>Total: ${speedTotal}</p>
+<p>Accuracy: ${accuracy}%</p>
+`
+
+/* 🧠 GUARDAR RECORD */
+
+let best=localStorage.getItem("speedBest")
+
+if(!best || speedScore>best){
+localStorage.setItem("speedBest",speedScore)
+result.innerHTML+=`<p style="color:#27ae60">🔥 NEW RECORD!</p>`
+}else{
+result.innerHTML+=`<p>Best: ${best}</p>`
+}
+
+let btn=document.createElement("button")
+btn.innerText="Play Again"
+btn.style.background="#6a11cb"
+
+btn.onclick=()=>{
+result.remove()
+renderSpeedRun()
+}
+
+result.appendChild(btn)
+
+gameArea.appendChild(result)
+
+playSound("win")
+}
+
+function showCombo(text,isFire=false){
+
+if(comboUI){
+comboUI.remove()
+}
+
+comboUI=document.createElement("div")
+comboUI.className="comboText"
+comboUI.innerText=text
+
+if(isFire){
+comboUI.classList.add("fireMode")
+}
+
+gameArea.appendChild(comboUI)
+
+setTimeout(()=>{
+if(comboUI) comboUI.remove()
+},800)
+
+}
+
+/* =========================
+⚡ SPEED RUN MODE
+========================= */
+
+function renderSpeedRun(){
+
+typingContainer.style.display="none"
+
+gameArea.innerHTML=""
+
+/* UI */
+
+let letterBox=document.createElement("div")
+letterBox.style.fontSize="50px"
+letterBox.style.fontWeight="bold"
+letterBox.innerText="?"
+
+let stopBtn=document.createElement("button")
+stopBtn.innerText="¡BASTA!"
+stopBtn.style.background="#e74c3c"
+
+let input=document.createElement("input")
+input.placeholder="Type words..."
+input.style.fontSize="22px"
+input.style.marginTop="15px"
+
+wordsBox=document.createElement("div")
+wordsBox.style.marginTop="15px"
+wordsBox.style.display="grid"
+wordsBox.style.gridTemplateColumns="repeat(5, 1fr)"
+wordsBox.style.gridTemplateRows="repeat(3, auto)"
+wordsBox.style.gridAutoFlow="column"
+wordsBox.style.gap="6px"
+wordsBox.style.maxHeight="180px"
+wordsBox.style.overflow="hidden"
+
+let timerUI=document.createElement("div")
+timerUI.style.fontSize="22px"
+timerUI.innerText="Time: 60"
+
+let scoreUI=document.createElement("div")
+scoreUI.style.fontSize="20px"
+scoreUI.innerText="0 / 0"
+
+/* ABC loop */
+
+let alphabet = getAdaptiveAlphabet()
+
+letterInterval=setInterval(()=>{
+speedLetter = alphabet[Math.floor(Math.random()*alphabet.length)]
+letterBox.innerText = speedLetter.toUpperCase()
+
+letterBox.classList.remove("roulette")
+void letterBox.offsetWidth
+letterBox.classList.add("roulette")
+
+letterBox.style.color="#6a11cb"
+},100)
+
+/* STOP BUTTON */
+
+stopBtn.onclick=()=>{
+
+wordsBox.innerHTML=""
+clearInterval(letterInterval)
+
+// 🔊 AUDIO PRO
+speak(`Stop. Letter ${speedLetter.toUpperCase()}`,0.9,"en-US")
+
+startSpeedGame(input, timerUI, scoreUI)
+
+}
+
+/* RENDER */
+
+gameArea.appendChild(letterBox)
+gameArea.appendChild(stopBtn)
+gameArea.appendChild(timerUI)
+gameArea.appendChild(input)
+gameArea.appendChild(scoreUI)
+gameArea.appendChild(wordsBox)
+
+}
+
+/* =========================
+🧠 MEMORY MATCH MODE
+========================= */
+
+let memoryCards=[]
+let memoryFirst=null
+let memoryLock=false
+
+function shuffleArray(array){
+
+for(let i=array.length-1;i>0;i--){
+
+let j=Math.floor(Math.random()*(i+1))
+
+let temp=array[i]
+array[i]=array[j]
+array[j]=temp
+
+}
+
+return array
+}
+
+function renderMemoryMatch(){
+
+gameArea.innerHTML=""
+
+/* TIMER MEMORY MODE */
+
+memoryTime=0
+
+if(memoryTimer) clearInterval(memoryTimer)
+
+let timerUI=document.createElement("div")
+timerUI.id="memoryTimer"
+
+timerUI.style.fontSize="22px"
+timerUI.style.fontWeight="bold"
+timerUI.style.color="#e74c3c"
+timerUI.style.marginBottom="10px"
+
+timerUI.innerText="⏱️ 0s"
+
+gameArea.appendChild(timerUI)
+
+memoryTimer=setInterval(()=>{
+
+memoryTime++
+
+timerUI.innerText="⏱️ "+memoryTime+"s"
+
+},1000)
+
+/* palabras con imagen */
+
+let words=currentList.filter(w=>hasImage(w.word))
+
+if(!currentList.length){
+   gameArea.innerHTML="No words loaded"
+   return
+}
+
+/* mezclar palabras */
+
+words=shuffleArray(words)
+
+let pairCount = parseInt(memoryDifficulty.value)
+
+if(words.length < pairCount){
+   gameArea.innerHTML="Not enough images for this difficulty"
+   return
+}
+
+words=words.slice(0,pairCount)
+
+let cards=[]
+
+words.forEach(w=>{
+
+cards.push({
+type:"word",
+word:w.word
+})
+
+cards.push({
+type:"image",
+word:w.word
+})
+
+})
+
+cards=shuffleArray(cards)
+
+memoryCards=cards
+
+let grid=document.createElement("div")
+grid.className="memoryGrid"
+
+cards.forEach((c,i)=>{
+
+let d=document.createElement("div")
+d.className="memoryCard memoryHidden"
+
+d.innerHTML=`
+<div class="memoryInner">
+
+<div class="memoryFront">?</div>
+
+<div class="memoryBack"></div>
+
+</div>
+`
+d.dataset.index=i
+
+d.onclick=()=>memoryFlip(d,c)
+
+d.style.animationDelay=(i*80)+"ms"
+
+grid.appendChild(d)
+
+})
+
+let counter=document.createElement("div")
+counter.id="memoryCounter"
+counter.style.fontSize="20px"
+counter.style.fontWeight="bold"
+counter.style.marginBottom="10px"
+counter.style.color="#2c3e50"
+counter.innerText="Pairs: 0 / "+words.length
+
+gameArea.appendChild(counter)
+gameArea.appendChild(grid)
+}
+
+function memoryFlip(card,data){
+
+if(card.classList.contains("flipped")) return
+
+if(memoryLock) return
+
+if(!card.classList.contains("memoryHidden")) return
+
+card.classList.remove("memoryHidden")
+card.classList.add("flipped")
+
+let back = card.querySelector(".memoryBack")
+
+if(data.type==="word"){
+
+if(!back.innerHTML){
+back.innerHTML =
+`<span style="font-size:22px;font-weight:bold">${data.word}</span>`
+}
+
+}else{
+
+if(back.innerHTML===""){
+let img=document.createElement("img")
+img.src=getImagePath(data.word)
+back.appendChild(img)
+}
+
+}
+
+/* PRIMERA CARTA */
+
+if(!memoryFirst){
+
+memoryFirst={card,data}
+return
+
+}
+
+/* SEGUNDA CARTA */
+
+memoryLock=true
+
+let second={card,data}
+
+setTimeout(()=>{
+
+checkMemoryPair(memoryFirst,second)
+
+memoryFirst=null
+memoryLock=false
+
+},700)
+
+}
+
+function checkMemoryPair(a,b){
+
+if(a.data.word===b.data.word && a.data.type!==b.data.type){
+
+a.card.classList.remove("memoryHidden")
+b.card.classList.remove("memoryHidden")
+
+a.card.classList.add("memoryMatch")
+b.card.classList.add("memoryMatch")
+
+speak(a.data.word)
+
+createMatchParticles(a.card)
+createMatchParticles(b.card)
+
+showGIF("assets/gifs/sparkle.gif",800)
+
+correct++
+
+}else{
+
+a.card.classList.remove("flipped")
+b.card.classList.remove("flipped")
+
+a.card.classList.add("memoryHidden")
+b.card.classList.add("memoryHidden")
+
+a.card.querySelector(".memoryBack").innerHTML=""
+b.card.querySelector(".memoryBack").innerHTML=""
+wrong++
+
+}
+
+updateUI()
+
+let matchedCards=document.querySelectorAll(".memoryMatch").length/2
+
+let totalPairs=memoryCards.length/2
+
+let counter=document.getElementById("memoryCounter")
+
+if(counter){
+counter.innerText=`Pairs: ${matchedCards} / ${totalPairs}`
+}
+
+/* 🏆 TABLERO COMPLETADO */
+
+let matched=document.querySelectorAll(".memoryMatch").length
+
+if(matched===memoryCards.length){
+
+clearInterval(memoryTimer)
+
+/* BEST TIME SYSTEM */
+
+let best = localStorage.getItem("memoryBestTime")
+
+if(!best || memoryTime < best){
+
+localStorage.setItem("memoryBestTime",memoryTime)
+
+let record=document.createElement("div")
+record.style.fontSize="18px"
+record.style.color="#27ae60"
+record.innerText="🏆 New Record: "+memoryTime+"s"
+
+gameArea.appendChild(record)
+
+}else{
+
+let record=document.createElement("div")
+record.style.fontSize="18px"
+record.innerText="Best Time: "+best+"s"
+
+gameArea.appendChild(record)
+
+}
+
+playSound("win")
+
+speak("Great memory")
+
+let msg=document.createElement("div")
+msg.className="memoryWin"
+msg.innerText="🧠 MEMORY MASTER!"
+
+gameArea.appendChild(msg)
+
+setTimeout(()=>{
+msg.remove()
+},2000)
+
+}
+
+}
+
+/* =========================
+📚 WORD LIST PRO
+========================= */
+
+listSelector.onchange=()=>{
+
+if(listSelector.value==="none"){
+wordList.innerHTML=""
+return
+}
+
+let arr=blocksData[listSelector.value]
+
+let perCol=15
+let cols=[]
+
+for(let i=0;i<arr.length;i+=perCol){
+cols.push(arr.slice(i,i+perCol))
+}
+
+wordList.innerHTML=cols.map(col=>`
+<div class="column">
+${col.map(w=>`
+<div onclick="selectWord('${w.word}'); speak('${w.word}')">
+${w.num}. ${w.word}
+</div>
+`).join("")}
+</div>
+`).join("")
+}
+
+/* =========================
+📖 DICTIONARY PRO
+========================= */
+const dictInput = document.getElementById("dictInput")
+const autocomplete = document.getElementById("autocomplete")
+const dictResult = document.getElementById("dictResult")
+
+
+dictInput.oninput=()=>{
+
+let v=dictInput.value.toLowerCase().trim()
+
+if(!v){
+autocomplete.innerHTML=""
+return
+}
+
+let mastery = getMastery()
+let mistakes = getMistakes()
+
+let matches = wordDB
+   .filter(w => w.word.toLowerCase().includes(v))
+   .sort((a,b)=>{
+
+      // 🔥 errores primero
+      let aMistake = mistakes.includes(a.word) ? 1 : 0
+      let bMistake = mistakes.includes(b.word) ? 1 : 0
+
+      if(aMistake !== bMistake) return bMistake - aMistake
+
+      // 🧠 dificultad después
+      let aScore = mastery[a.word]?.score || 0
+      let bScore = mastery[b.word]?.score || 0
+
+      return aScore - bScore
+   })
+   .map(w => w.word)
+   .slice(0,6)
+
+   autocomplete.innerHTML = matches.map(w=>`
+   <div class="autoItem" data-word="${w}">
+      ${w}
+   </div>
+   `).join("")
+
+   // 👇 ESTE BLOQUE VA AQUÍ
+   document.querySelectorAll(".autoItem").forEach(el=>{
+      el.onclick = () => {
+         selectWord(el.dataset.word)
+      }
+   })
+
+} 
+
+dictInput.addEventListener("keydown",e=>{
+if(e.key==="Enter"){
+selectWord(dictInput.value)
+}
+})
+
+function searchWord(v){
+
+   let w = wordDB.find(x => x.word.toLowerCase() === v.toLowerCase())
+
+   if(!w) return
+
+   let path = hasImage(w.word) ? getImagePath(w.word) : ""
+
+   dictResult.innerHTML = `
+   <div class="dictCard">
+
+      <img class="dictImage"
+     src="${path}"
+     style="${path ? '' : 'display:none'}"
+     onerror="this.style.display='none'">
+
+      <div class="dictWord">${w.word}</div>
+      <div class="dictPhon">/${w.phon || ""}/</div>
+
+      <div class="label def" id="btnDef">🔊 Definition</div>
+      <div>${w.def || ""}</div>
+
+      <div class="label mean" id="btnMean">🔊 Meaning</div>
+      <div>${w.mean || ""}</div>
+
+      <div class="label sent" id="btnSent">🔊 Sentence</div>
+      <div>${w.sent || ""}</div>
+   `
+
+let card = document.querySelector(".dictCard")
+
+if(card){
+   card.classList.remove("cardAnim")
+void card.offsetWidth
+card.classList.add("cardAnim")
+}
+
+   let btnDef = document.getElementById("btnDef")
+   let btnMean = document.getElementById("btnMean")
+   let btnSent = document.getElementById("btnSent")
+
+   if(btnDef){
+   btnDef.onclick = (e) => {
+      e.stopPropagation()
+      speechSynthesis.cancel()
+      animateSpeak(btnDef)
+
+      // ✨ animar palabra
+      let dictWord = document.querySelector(".dictWord")
+      if(dictWord){
+         dictWord.classList.add("wordSpeaking")
+         setTimeout(()=>dictWord.classList.remove("wordSpeaking"),1200)
+      }
+
+      speak(w.def, 0.75)
+   }
+}
+
+   if(btnMean){
+   btnMean.onclick = (e) => {
+      e.stopPropagation()
+      speechSynthesis.cancel()
+      animateSpeak(btnMean)
+
+      let dictWord = document.querySelector(".dictWord")
+      if(dictWord){
+         dictWord.classList.add("wordSpeaking")
+         setTimeout(()=>dictWord.classList.remove("wordSpeaking"),500)
+      }
+
+      speakSpanishFemale(w.mean)
+   }
+}
+
+   if(btnSent){
+   btnSent.onclick = (e) => {
+      e.stopPropagation()
+      speechSynthesis.cancel()
+      animateSpeak(btnSent)
+
+      let dictWord = document.querySelector(".dictWord")
+      if(dictWord){
+         dictWord.classList.add("wordSpeaking")
+         setTimeout(()=>dictWord.classList.remove("wordSpeaking"),500)
+      }
+
+      speak(w.sent, 0.75)
+   }
+}
+
+   let dictWord = document.querySelector(".dictWord")
+
+if(dictWord){
+
+   // 🔊 limpiar audio previo
+   speechSynthesis.cancel()
+
+   // ✨ animación
+   dictWord.classList.add("wordSpeaking")
+
+   // 🔊 reproducir palabra UNA VEZ
+   speak(w.word)
+
+   setTimeout(()=>{
+      dictWord.classList.remove("wordSpeaking")
+   }, 500)
+}}
+
+// 👇 SOLO UNA VEZ
+function selectWord(word){
+
+   if(!word) return
+
+   dictInput.value = word
+   autocomplete.innerHTML = ""
+
+   searchWord(word)
+}
+
+
+/* CLEAR */
+function clearDictionary(){
+dictInput.value=""
+autocomplete.innerHTML=""
+dictResult.innerHTML=""
+}
+
+// =========================
+// ✨ ANIMATE SPEAKING BUTTON
+// =========================
+
+function animateSpeak(el){
+
+   if(!el) return
+
+   el.classList.add("active")
+
+   setTimeout(()=>{
+      el.classList.remove("active")
+   }, 1200)
+}
+
+speechSynthesis.onvoiceschanged = () => {}
+
+
+</script>
+
+</body>
+</html>
